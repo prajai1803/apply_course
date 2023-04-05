@@ -25,7 +25,7 @@ class CourseModel {
         this.programLevel,
         this.programLength,
         this.costOfLiving,
-        this.tution,
+        this.tutionFee,
         this.applicationFee,
         this.minEducationLevel,
         this.admissionRequirement,
@@ -46,7 +46,7 @@ class CourseModel {
     List<String>? programLevel;
     int? programLength;
     int? costOfLiving;
-    String? tution;
+    int? tutionFee;
     int? applicationFee;
     String? minEducationLevel;
     AdmissionRequirement? admissionRequirement;
@@ -67,7 +67,7 @@ class CourseModel {
         List<String>? programLevel,
         int? programLength,
         int? costOfLiving,
-        String? tution,
+        int? tutionFee,
         int? applicationFee,
         String? minEducationLevel,
         AdmissionRequirement? admissionRequirement,
@@ -88,7 +88,7 @@ class CourseModel {
             programLevel: programLevel ?? this.programLevel,
             programLength: programLength ?? this.programLength,
             costOfLiving: costOfLiving ?? this.costOfLiving,
-            tution: tution ?? this.tution,
+            tutionFee: tutionFee ?? this.tutionFee,
             applicationFee: applicationFee ?? this.applicationFee,
             minEducationLevel: minEducationLevel ?? this.minEducationLevel,
             admissionRequirement: admissionRequirement ?? this.admissionRequirement,
@@ -110,7 +110,7 @@ class CourseModel {
         programLevel: json["programLevel"] == null ? [] : List<String>.from(json["programLevel"]!.map((x) => x)),
         programLength: json["programLength"],
         costOfLiving: json["costOfLiving"],
-        tution: json["tution"],
+        tutionFee: json["tution_fee"],
         applicationFee: json["application_fee"],
         minEducationLevel: json["minEducationLevel"],
         admissionRequirement: json["admissionRequirement"] == null ? null : AdmissionRequirement.fromJson(json["admissionRequirement"]),
@@ -132,7 +132,7 @@ class CourseModel {
         "programLevel": programLevel == null ? [] : List<dynamic>.from(programLevel!.map((x) => x)),
         "programLength": programLength,
         "costOfLiving": costOfLiving,
-        "tution": tution,
+        "tution_fee": tutionFee,
         "application_fee": applicationFee,
         "minEducationLevel": minEducationLevel,
         "admissionRequirement": admissionRequirement?.toJson(),
