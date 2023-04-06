@@ -128,6 +128,13 @@ class FirebaseProvider {
     }
   }
 
+  // Future<CourseModel> getall() async{
+  //   CollectionReference courses = _firestore.collection(KeysConstant.Courses);
+  //   QuerySnapshot querySnapshot = await courses.get();
+  //   final a = querySnapshot.docs.map((e) => CourseModel.fromJson(e.data() as Map<String,dynamic>));
+  //   return a;
+  // }
+
   Future<List<CourseModel>> getAllCourses() async{
     List<CourseModel> list = [];
     CollectionReference courses = _firestore.collection(KeysConstant.Courses);

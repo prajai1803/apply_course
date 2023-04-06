@@ -2,24 +2,35 @@ import 'package:apply_course/app/modules/home/home_conrtroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../core/values/apply_filter_dropdown_models.dart';
 
 class ApplyFilterWithBottomSheet extends StatelessWidget {
   ApplyFilterWithBottomSheet({super.key});
 
   final _controller = Get.put(HomeController());
 
-  var _height = ScreenUtil().screenHeight;
-  var _width = ScreenUtil().screenWidth;
+  final _height = ScreenUtil().screenHeight;
+  final _width = ScreenUtil().screenWidth;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 500.h,
       width: double.infinity,
+      decoration: BoxDecoration(
+                  color: Colors.white,
+        borderRadius: BorderRadius.circular(30)
+      ),
+      
       // child: Text("$_width X $_height"),
-      child: SizedBox(
+      child: Container(
+        decoration: const BoxDecoration(
+          
+          color: Colors.white,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+      ),
         height: 500,
         child: Column(
           children: [
@@ -29,18 +40,19 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
               padding: EdgeInsets.only(left: 28, top: 18.h, right: 8),
               decoration: BoxDecoration(
                 color: Colors.white,
+                borderRadius: BorderRadius.circular(30)
               ),
               child: Row(
                 children: [
                   Text(
-                    "Filter Apply Jobs",
+                    "Filter Apply Courses",
                     style: GoogleFonts.openSans(
                         fontSize: 18.sp, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
-            Divider(),
+           const Divider(),
             Container(
               child: Row(
                 children: [
@@ -48,7 +60,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                       height: 400.h,
                       width: 100,
                       child: ListView.separated(
-                        itemCount: 10,
+                        itemCount: _controller.listOfFilter.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
@@ -72,7 +84,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                           EdgeInsets.symmetric(vertical: 12.h),
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 8.h),
-                                      child: Text("Tab $index"),
+                                      child: Text(_controller.listOfFilter[index]),
                                     ),
                                   ),
                                 ],
@@ -115,24 +127,29 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 340.h,
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return 
-                                     Obx(
-                                       ()=> RadioMenuButton(
-                                          value: "development $index",
-                                          groupValue: _controller.department.value,
-                                     
-                                          onChanged: (value) {
-                                            printInfo(info: value!);
-                                            _controller.department.value = value;
-                                          },
-                                          child: Text("Development $index"),
-                                                                       ),
-                                     );
-                                },
+                            Obx(
+                              ()=> SizedBox(
+                                height: 340.h,
+                                child: ListView.builder(
+                                  itemCount: ApplyFilterDropDownModels.list[_controller.currentTabIndex.value].length,
+                                  itemBuilder: (context, index) {
+                                    var data = ApplyFilterDropDownModels.list[_controller.currentTabIndex.value];
+                                    return 
+                                       Obx(
+                                         ()=> RadioMenuButton(
+                                            value: data[index],
+                                            groupValue: _controller.getListName(_controller.currentTabIndex.value).value,
+                                       
+                                            onChanged: (value) {
+                                              printInfo(info: value!.toString());
+                                              _controller.getListName(_controller.currentTabIndex.value).value = value;
+                                            },
+                                            
+                                            child: Text(data[index]),
+                                                                         ),
+                                       );
+                                  },
+                                ),
                               ),
                             )
                           ],

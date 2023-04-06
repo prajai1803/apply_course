@@ -1,8 +1,5 @@
-import 'package:apply_course/app/data/models/course_model.dart';
 import 'package:apply_course/app/modules/home/home_conrtroller.dart';
 import 'package:apply_course/app/modules/home/widgets/apply_filter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,25 +7,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../widgets/card_button.dart';
 import '../../widgets/course_card.dart';
-import '../../widgets/course_card2.dart';
-import '../../widgets/float_dropdown_button.dart';
 
 class HomeScreen extends GetView {
   HomeScreen({super.key});
 
-  // final _controller = Get.put(HomeController());
-  // final homeCtrl = Get.find<HomeController>();
+  final _controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     // homeCtrl.getCourses();
-      //     // _controller.getCourses();
-      //   },
-      //   child: Icon(Icons.analytics),
-      // ),
       backgroundColor: const Color.fromARGB(255, 244, 245, 255),
       body: SafeArea(
         child: Column(
@@ -39,10 +26,8 @@ class HomeScreen extends GetView {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(12.r),
-                    child: Image.asset(
-                      "assets/apply_course.png",
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Text("Apply Course",style: GoogleFonts.openSans(fontSize: 16,fontWeight: FontWeight.w600),)
                   ),
                   Row(
                     children: [
@@ -76,11 +61,11 @@ class HomeScreen extends GetView {
 
             // Search bar
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 6.h),
+              padding: EdgeInsets.symmetric(vertical: 3.h),
               child: SizedBox(
-                height: 70.h,
+                height: 60.h,
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(10),
                   child: Card(
                     elevation: 3,
                     shape: RoundedRectangleBorder(
@@ -90,8 +75,8 @@ class HomeScreen extends GetView {
                       decoration: InputDecoration(
                           fillColor: Colors.white,
                           prefixIcon: Padding(
-                            padding: EdgeInsets.only(left: 24, top: 0, right: 6),
-                            child: const Icon(Icons.search),
+                            padding: EdgeInsets.only(left: 24, right: 6),
+                            child: Icon(Icons.search,size: 25.r,),
                           ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(45))),
@@ -101,8 +86,8 @@ class HomeScreen extends GetView {
               ),
             ),
             Container(
-              height: 40.h,
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              height: 35.h,
+              padding: EdgeInsets.symmetric(horizontal: 6),
               child: Row(
                 children: [
                   InkWell(
@@ -111,7 +96,7 @@ class HomeScreen extends GetView {
                       // elevation: 100,  
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)
+                        borderRadius: BorderRadius.circular(30)
                       ),
                       isScrollControlled:true,                  
                        builder: (context) {
@@ -127,10 +112,10 @@ class HomeScreen extends GetView {
                           padding: EdgeInsets.only(left: 6),
                           child: Row(
                             children: [
-                              Icon(Icons.filter_alt_outlined,size: 18.r,),
+                              Icon(Icons.filter_alt_outlined,size: 14.r,),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 2),
-                                child: Text("Filter",style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 13.sp),),
+                                child: Text("Filter",style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 12.sp),),
                               )
                             ],
                           ),
@@ -148,52 +133,52 @@ class HomeScreen extends GetView {
                         return CardButton();
                       },
                     ),
-                    // child: FutureBuilder(
-                    //   future: _controller.getCourses(),
-
-                    //   builder: (context, snapshot) {
-                    //     return ListView.builder(
-                    //   scrollDirection: Axis.horizontal,
-                    //   shrinkWrap: true,
-                    //   physics: ClampingScrollPhysics(),
-                    //   itemCount: 1,
-                    //   itemBuilder: (context, index) {
-                    //     return Text();
-                    //   },
-                    // );
-                    //   },
-                    // child: Text(""),
-
-                    // ),
                   ),
                 ],
               ),
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: Container(
-                height: 30,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  "25,447 Developer Jobs",
-                  style: GoogleFonts.openSans(
-                      fontSize: 21, fontWeight: FontWeight.bold),
+              child: Obx(
+                ()=> Container(
+                  height: 30.h,
+                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 8),
+                  child: Text(
+                    "${_controller.coursesList.length} Courses found",
+                    style: GoogleFonts.openSans(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
                 ),
               ),
             ),
-            // SizedBox(
-            //   height: 400,
-            //   child: ListView.builder(
-            //     itemCount: 5,
-            //     itemBuilder: (context, index) {
-            //     CourseCard2();
-            //   },),
-            // )
-            Expanded(
-              child: ListView.builder(itemBuilder: (context, index) {
-                return CourseCard2();
-              },),
-            )
+            Obx(
+              ()=> Container(
+                child: 
+               _controller.coursesList.isNotEmpty ? Expanded(
+                      child: 
+                        ListView.builder(
+                          itemCount: _controller.coursesList.length,
+                          itemBuilder: (context, index) {
+                            print(_controller.coursesList.length);
+                          var data = _controller.coursesList[index];
+                          print(data.universityLogo);
+                           return CourseCard(
+                            universityName: data.university,
+                            applicationFee: data.applicationFee,
+                            mode: data.programMethod![0],
+                            courseName: data.courseName,
+                            duration: data.programLength,
+                            location: data.location,
+                            courseLogo: data.universityLogo,
+                            tutionFee: data.tutionFee,
+                          );
+                        },),
+                      
+                    ) : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ),
+            ) 
           ],
         ),
       ),

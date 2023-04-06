@@ -1,121 +1,204 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({super.key});
+  String? courseName;
+  String? universityName;
+  String? courseLogo;
+  String? duration;
+  String? location;
+  String? mode;
+  int? tutionFee;
+  int? applicationFee;
+
+
+  CourseCard({
+    super.key,
+    this.courseName,
+    this.courseLogo,
+    this.location,
+    this.applicationFee,
+    this.tutionFee,
+    this.mode,
+    this.duration,
+    this.universityName,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8.w),
       child: Card(
-        elevation: 10,
-        child: SizedBox(
-            height: 250.h,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
-                  child: SizedBox(
-                    width: 50,
-                    child: Image.network(
-                        "https://cdn-icons-png.flaticon.com/512/1384/1384879.png"),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Container(
+          // height: 250.h,
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: Card(child: Image.network("$courseLogo")),
+                    ),
                   ),
-                ),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "4-Year Bachelor's Degree",
-                            style: GoogleFonts.openSans(
-                                fontSize: 12, fontWeight: FontWeight.w600),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        child: Text(
+                          courseName ?? "",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 0.h),
+                        child: Text(
+                          universityName ?? "",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ))
+                ],
+              ),
+              Divider(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10.w),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.work_outline,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Text(
+                                  duration ?? "",
+                                  style: GoogleFonts.openSans(
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 4),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 1),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Text(
-                                "On-Campus",
-                                style: Theme.of(context).textTheme.labelSmall
+                        ),
+                        Row(
+                          children: [
+                            Card(
+                              child: Container(
+                                height: 20,
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Text(
+                                  mode ?? "",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ),
-                          )
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 4.w,vertical: 10.h),
-                      child: Text(
-                        "Bachelor of Science - Data Science and Analytics - Data Scince in Engineering",
-                        style: GoogleFonts.openSans(
-                            fontSize: 14, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 6),
-                      child: Text(
-                        "Florida Atlantic University",
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.location_on_outlined),
-                          Text(
-                            "Florida Atlantic University",
-                            style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 3),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 6),
+                          child: Icon(Icons.location_on_outlined),
+                        ),
+                        Expanded(
+                            child: Text(
+                          location ?? "",
+                          style: GoogleFonts.openSans(
+                            fontSize: 12,
                           ),
-                        ],
-                      ),
+                        )),
+                      ],
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 6, right: 4, left: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 20.w, left: 20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Tution",style: Theme.of(context).textTheme.bodyMedium,),
-                              Text("900000 USD",style: Theme.of(context).textTheme.labelMedium)
+                              Text(
+                                "Tution fees",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Text(
+                                tutionFee.toString(),
+                                style: GoogleFonts.openSans(fontSize: 12),
+                              ),
                             ],
                           ),
-                          Column(
-                            children: const [
-                              Text("Applicatino Fees"),
-                              Text("30000 USD")
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Application fees",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Text(
+                                applicationFee.toString(),
+                                style: GoogleFonts.openSans(
+                                  fontSize: 12,
+                                ),
+                              )
                             ],
                           ),
-                          const Icon(
-                            Icons.bookmark_outline_outlined,
-                            size: 36,
-                          )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ))
-              ],
-            )),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

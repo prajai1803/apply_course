@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CardButton extends StatelessWidget {
   const CardButton({super.key});
@@ -13,7 +14,7 @@ class CardButton extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(left: 6),
           child: Row(
-            children: [Text("Development"), Icon(Icons.arrow_drop_down,size: 18,)],
+            children: [Text("Development",style: GoogleFonts.openSans(fontWeight: FontWeight.w400,fontSize: 12),), Icon(Icons.arrow_drop_down,size: 18,)],
           ),
         ),
       ),

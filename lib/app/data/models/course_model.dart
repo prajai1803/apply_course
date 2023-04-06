@@ -44,7 +44,7 @@ class CourseModel {
     List<String>? images;
     String? programSummary;
     List<String>? programLevel;
-    int? programLength;
+    String? programLength;
     int? costOfLiving;
     int? tutionFee;
     int? applicationFee;
@@ -65,7 +65,7 @@ class CourseModel {
         List<String>? images,
         String? programSummary,
         List<String>? programLevel,
-        int? programLength,
+        String? programLength,
         int? costOfLiving,
         int? tutionFee,
         int? applicationFee,
@@ -110,7 +110,7 @@ class CourseModel {
         programLevel: json["programLevel"] == null ? [] : List<String>.from(json["programLevel"]!.map((x) => x)),
         programLength: json["programLength"],
         costOfLiving: json["costOfLiving"],
-        tutionFee: json["tution_fee"],
+        tutionFee: json["tutionFee"],
         applicationFee: json["application_fee"],
         minEducationLevel: json["minEducationLevel"],
         admissionRequirement: json["admissionRequirement"] == null ? null : AdmissionRequirement.fromJson(json["admissionRequirement"]),
@@ -132,7 +132,7 @@ class CourseModel {
         "programLevel": programLevel == null ? [] : List<dynamic>.from(programLevel!.map((x) => x)),
         "programLength": programLength,
         "costOfLiving": costOfLiving,
-        "tution_fee": tutionFee,
+        "tutionFee": tutionFee,
         "application_fee": applicationFee,
         "minEducationLevel": minEducationLevel,
         "admissionRequirement": admissionRequirement?.toJson(),

@@ -6,7 +6,7 @@ import 'controller.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
-  final _controller = Get.put(AuthController());
+  final _controller = Get.find<AuthController>();
 
 
   @override
