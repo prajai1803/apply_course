@@ -20,17 +20,15 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
       height: 500.h,
       width: double.infinity,
       decoration: BoxDecoration(
-                  color: Colors.white,
-        borderRadius: BorderRadius.circular(30)
-      ),
-      
+          color: Colors.white, borderRadius: BorderRadius.circular(30)),
+
       // child: Text("$_width X $_height"),
       child: Container(
         decoration: const BoxDecoration(
-          
           color: Colors.white,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-      ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        ),
         height: 500,
         child: Column(
           children: [
@@ -39,9 +37,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
               height: 76.h,
               padding: EdgeInsets.only(left: 28, top: 18.h, right: 8),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(30)),
               child: Row(
                 children: [
                   Text(
@@ -52,7 +48,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                 ],
               ),
             ),
-           const Divider(),
+            const Divider(),
             Container(
               child: Row(
                 children: [
@@ -65,6 +61,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               _controller.currentTabIndex.value = index;
+                              _controller.changeCategory();
                             },
                             child: Obx(
                               () => Row(
@@ -84,7 +81,12 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                           EdgeInsets.symmetric(vertical: 12.h),
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 8.h),
-                                      child: Text(_controller.listOfFilter[index]),
+                                      child: Text(
+                                        _controller.listOfFilter[index],
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -113,6 +115,10 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: TextField(
+                                    onChanged: (value) {
+                                      _controller.filterSearchController.value = value;
+                                      _controller.inFilterSearch(_controller.filterSearchController.value);
+                                    },
                                     decoration: InputDecoration(
                                         fillColor: Colors.white,
                                         prefixIcon: Padding(
@@ -128,26 +134,34 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                               ),
                             ),
                             Obx(
-                              ()=> SizedBox(
+                              () => Container(
                                 height: 340.h,
                                 child: ListView.builder(
-                                  itemCount: ApplyFilterDropDownModels.list[_controller.currentTabIndex.value].length,
+                                  itemCount: _controller.filterdList.value.length,
                                   itemBuilder: (context, index) {
-                                    var data = ApplyFilterDropDownModels.list[_controller.currentTabIndex.value];
-                                    return 
-                                       Obx(
-                                         ()=> RadioMenuButton(
-                                            value: data[index],
-                                            groupValue: _controller.getListName(_controller.currentTabIndex.value).value,
-                                       
-                                            onChanged: (value) {
-                                              printInfo(info: value!.toString());
-                                              _controller.getListName(_controller.currentTabIndex.value).value = value;
-                                            },
-                                            
-                                            child: Text(data[index]),
-                                                                         ),
-                                       );
+                                    // return Text('$index');
+                                    return Obx(
+                                     ()=> RadioMenuButton(
+                                        value: _controller.filterdList[index],
+                                        groupValue: _controller
+                                            .getListName(
+                                                _controller.currentTabIndex.value)
+                                            .value,
+                                        onChanged: (value) {
+                                          printInfo(info: value!.toString());
+                                          _controller
+                                              .getListName(_controller
+                                                  .currentTabIndex.value)
+                                              .value = value;
+                                        },
+                                        child: Text(
+                                          _controller.filterdList[index],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),

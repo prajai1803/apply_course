@@ -40,8 +40,6 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -56,6 +54,26 @@
         }
       });
     });
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script>
+    const firebaseConfig = {
+
+apiKey: "AIzaSyBZo-TIcE1U6uIKezDYrO2p12_a3MLkUOM",
+
+authDomain: "applycoursez.firebaseapp.com",
+
+projectId: "applycoursez",
+
+storageBucket: "applycoursez.appspot.com",
+
+messagingSenderId: "303296473687",
+
+appId: "1:303296473687:web:bff2942e29a29a60fed112"
+
+};
+firebase.initializeApp(firebaseConfig);
   </script>
 </body>
 </html>

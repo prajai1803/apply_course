@@ -9,6 +9,7 @@ class CourseCard extends StatelessWidget {
   String? duration;
   String? location;
   String? mode;
+  String? programLevel;
   int? tutionFee;
   int? applicationFee;
 
@@ -23,6 +24,7 @@ class CourseCard extends StatelessWidget {
     this.mode,
     this.duration,
     this.universityName,
+    this.programLevel,
   });
 
   @override
@@ -98,11 +100,21 @@ class CourseCard extends StatelessWidget {
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  duration ?? "",
-                                  style: GoogleFonts.openSans(
-                                    fontSize: 12,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      duration == null? "" :duration! + " ",
+                                      style: GoogleFonts.openSans(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                      programLevel ?? "",
+                                      style: GoogleFonts.openSans(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

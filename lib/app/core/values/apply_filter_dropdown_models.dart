@@ -12,8 +12,8 @@ class ApplyFilterDropDownModels {
   ];
 
   static const listOfLevel = [
-    "Post Graduation",
-    "Uder Graduation"
+    "Bachelor's Degree",
+    "Master's Degree"
   ];
 
   static const listOfCategory = [
@@ -38,10 +38,10 @@ class ApplyFilterDropDownModels {
   ];
 
   static const listOfDuration = [
-    "4-year Bachelor's Degree",
-    "3-year Bachelor's Degree",
-    "2-year Bachelor's Degree",
-    "1-year Bachelor's Degree",
+    "4-years",
+    "3-years",
+    "2-years",
+    "1-year",
   ];
 
   static const listOfFee = [

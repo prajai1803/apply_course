@@ -108,7 +108,8 @@ class FirebaseProvider {
         emailVerified: true,
       );
       printInfo(info: userCredential.user!.emailVerified.toString());
-      // await users.doc(userCredential.user!.uid).set(userModel.toJson());
+      await _storageProvider.writeUserModel(userModel);
+      await users.doc(userCredential.user!.uid).set(userModel.toJson());
       return true;
     } catch (e) {
       printInfo(info: e.toString());
