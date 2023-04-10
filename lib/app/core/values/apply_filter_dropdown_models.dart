@@ -34,7 +34,8 @@ class ApplyFilterDropDownModels {
   ];
 
   static const listOfLocation = [
-    "Bilaspur",
+    "India",
+    "United State America",
   ];
 
   static const listOfDuration = [

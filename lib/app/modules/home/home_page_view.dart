@@ -19,38 +19,38 @@ class HomeScreen extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          FirebaseFirestore _f = FirebaseFirestore.instance;
-          CollectionReference c = _f.collection(KeysConstant.Courses);
-          await c.doc().set(CourseModel(
-                  courseName: "BCA",
-                  costOfLiving: 300,
-                  university: "Bilaspur University",
-                  category: "BCA",
-                  courseId: 4579,
-                  location: "Bilaspur, Chhattishgarh",
-                  minEducationLevel: "",
-                  programLevel: ["Bachelor's Degree"],
-                  programLength: "3-years",
-                  subCategory: "None",
-                  programMethod: ["Online"],
-                  programSummary: "Lorem Isme",
-                  startDate: "20-03-2023",
-                  universityLogo:
-                      "https://upload.wikimedia.org/wikipedia/en/4/46/Atal_Bihari_Vajpayee_Vishwavidyalaya.jpg?20181012220030",
-                  universityDetails: "Lorem ipsam",
-                  admissionRequirement: AdmissionRequirement(
-                      academicsBackgroud: AcademicsBackgroud(
-                          minimumEducation: "12th",
-                          minimumGpa: "6",
-                          minimumLts: ["TCSl"])),
-                  applicationFee: 20,
-                  tutionFee: 5000)
-              .toJson());
-        },
-        child: Icon(Icons.abc),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     FirebaseFirestore _f = FirebaseFirestore.instance;
+      //     CollectionReference c = _f.collection(KeysConstant.Courses);
+      //     await c.doc().set(CourseModel(
+      //             courseName: "BCA",
+      //             costOfLiving: 300,
+      //             university: "Bilaspur University",
+      //             category: "BCA",
+      //             courseId: 4579,
+      //             location: "Bilaspur, Chhattishgarh",
+      //             minEducationLevel: "",
+      //             programLevel: ["Bachelor's Degree"],
+      //             programLength: "3-years",
+      //             subCategory: "None",
+      //             programMethod: ["Online"],
+      //             programSummary: "Lorem Isme",
+      //             startDate: "20-03-2023",
+      //             universityLogo:
+      //                 "https://upload.wikimedia.org/wikipedia/en/4/46/Atal_Bihari_Vajpayee_Vishwavidyalaya.jpg?20181012220030",
+      //             universityDetails: "Lorem ipsam",
+      //             admissionRequirement: AdmissionRequirement(
+      //                 academicsBackgroud: AcademicsBackgroud(
+      //                     minimumEducation: "12th",
+      //                     minimumGpa: "6",
+      //                     minimumLts: ["TCSl"])),
+      //             applicationFee: 20,
+      //             tutionFee: 5000)
+      //         .toJson());
+      //   },
+      //   child: Icon(Icons.abc),
+      // ),
       backgroundColor: const Color.fromARGB(255, 244, 245, 255),
       body: SafeArea(
         child: Column(
@@ -104,9 +104,9 @@ class HomeScreen extends GetView {
 
             // Search bar
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 3.h),
+              padding: EdgeInsets.symmetric(vertical: 3),
               child: SizedBox(
-                height: 60.h,
+                height: 62,
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Card(
@@ -123,7 +123,7 @@ class HomeScreen extends GetView {
                             padding: EdgeInsets.only(left: 24, right: 6),
                             child: Icon(
                               Icons.search,
-                              size: 25.r,
+                              size: 25,
                             ),
                           ),
                           border: OutlineInputBorder(
@@ -187,9 +187,27 @@ class HomeScreen extends GetView {
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
-                      itemCount: 4,
+                      itemCount: _controller.listOfFilter.length,
                       itemBuilder: (context, index) {
-                        return CardButton();
+                        var name = _controller.listOfFilter[index];
+                        return InkWell(
+                          onTap: (){
+                            _controller.currentTabIndex.value = index;
+                            _controller.changeCategory();
+                            showModalBottomSheet(
+                        context: context,
+                        // elevation: 100,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return ApplyFilterWithBottomSheet();
+                        },
+                      );
+                            
+                          },
+                          child: CardButton(name: name,));
                       },
                     ),
                   ),

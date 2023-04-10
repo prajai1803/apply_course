@@ -21,7 +21,7 @@ class SplashController extends GetxController {
     try {
       UserModel userModel = await _storage.readUserModel();
       if (userModel.emailVerified ?? false) {
-        Get.offAllNamed(AppRoutes.homeScreen);
+        Get.offAllNamed(AppRoutes.appBaseScreen);
       } else {
         Get.offAllNamed(AppRoutes.loginScreen);
       }
