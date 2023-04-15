@@ -1,3 +1,4 @@
+import 'package:apply_course/app/core/themes/theme.dart';
 import 'package:apply_course/app/routes/pages.dart';
 import 'package:apply_course/app/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +27,8 @@ class ApplyCourse extends StatelessWidget {
       builder: (context, child) =>  GetMaterialApp(
         title: "Apply Course",
         initialRoute: AppRoutes.splashScreen,
-        getPages: AppPages.pages,        
+        getPages: AppPages.pages,     
+        theme: AppTheme.lightTheme,
       ),
     );
   }
