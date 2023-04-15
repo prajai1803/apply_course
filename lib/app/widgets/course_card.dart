@@ -104,15 +104,11 @@ class CourseCard extends StatelessWidget {
                                   children: [
                                     Text(
                                       duration == null? "" :duration! + " ",
-                                      style: GoogleFonts.openSans(
-                                        fontSize: 12,
-                                      ),
+                                      style: Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
                                       programLevel ?? "",
-                                      style: GoogleFonts.openSans(
-                                        fontSize: 12,
-                                      ),
+                                      style: Theme.of(context).textTheme.bodySmall,
                                     ),
                                   ],
                                 ),
@@ -134,7 +130,7 @@ class CourseCard extends StatelessWidget {
                                       .textTheme
                                       .titleSmall!
                                       .copyWith(
-                                          fontSize: 10,
+                                          fontSize: 10.sp,
                                           fontWeight: FontWeight.w400),
                                 ),
                               ),
@@ -155,9 +151,7 @@ class CourseCard extends StatelessWidget {
                         Expanded(
                             child: Text(
                           location ?? "",
-                          style: GoogleFonts.openSans(
-                            fontSize: 12,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
                         )),
                       ],
                     ),
@@ -180,7 +174,7 @@ class CourseCard extends StatelessWidget {
                               ),
                               Text(
                                 tutionFee.toString(),
-                                style: GoogleFonts.openSans(fontSize: 12),
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
@@ -196,9 +190,7 @@ class CourseCard extends StatelessWidget {
                               ),
                               Text(
                                 applicationFee.toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 12,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall,
                               )
                             ],
                           ),
