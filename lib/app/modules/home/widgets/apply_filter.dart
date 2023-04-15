@@ -31,6 +31,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
         ),
         height: 500,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // titile
             Container(
@@ -48,12 +49,12 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                 ],
               ),
             ),
-            const Divider(),
+            const Divider(thickness: 1.5,),
             Container(
               child: Row(
                 children: [
                   SizedBox(
-                      height: 400.h,
+                      height: 340.h,
                       width: 100,
                       child: ListView.separated(
                         itemCount: _controller.listOfFilter.length,
@@ -100,13 +101,17 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                           );
                         },
                       )),
+                      Container(
+                        height: 350.h,
+                        width: 2,
+                        child: VerticalDivider(thickness: 1.5,)),
                   Expanded(
                     child: SizedBox(
-                        height: 400,
+                        height: 350.h,
                         child: ListView(
                           children: [
                             SizedBox(
-                              height: 70.h,
+                              height: 70,
                               child: Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Card(
@@ -115,6 +120,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: TextField(
+                                    style: Theme.of(context).textTheme.bodySmall,
                                     onChanged: (value) {
                                       _controller.filterSearchController.value = value;
                                       _controller.inFilterSearch(_controller.filterSearchController.value);
@@ -127,6 +133,7 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                           child: const Icon(Icons.search),
                                         ),
                                         border: OutlineInputBorder(
+                                          
                                             borderRadius:
                                                 BorderRadius.circular(5))),
                                   ),
@@ -135,8 +142,8 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                             ),
                             Obx(
                               () => Container(
-                                height: 340.h,
-                                child: ListView.builder(
+                                height: 400.h,
+                                child: _controller.filterdList.value.length != 0 ?ListView.builder(
                                   itemCount: _controller.filterdList.value.length,
                                   itemBuilder: (context, index) {
                                     // return Text('$index');
@@ -163,6 +170,9 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                       ),
                                     );
                                   },
+                                ) : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [Text("Sorry! No Result Found.",style: Theme.of(context).textTheme.bodySmall,)],
                                 ),
                               ),
                             )
@@ -170,6 +180,24 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                         )),
                   )
                 ],
+              ),
+            ),
+            const Divider(thickness: 1.5,),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(onPressed: () {
+                      Get.back();
+                    }, child: Text("Cancel",style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.blue[800] ),)),
+                    ElevatedButton(onPressed: (){
+                      Get.back();
+                    }, child: Text("Apply Filter",style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white),))
+                  ],
+                ),
               ),
             )
           ],
