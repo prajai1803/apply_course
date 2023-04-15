@@ -8,7 +8,9 @@ import 'package:get_storage/get_storage.dart';
 class HomeController extends GetxController {
   FirebaseProvider _firebaseProvider = FirebaseProvider();
 
-  final coursesList = <CourseModel>[].obs;
+  // final coursesList = <CourseModel>[].obs;
+  final coursesList = List<CourseModel>.empty(growable: true).obs;
+
 
   // Apply Filter
   final currentTabIndex = 0.obs;
@@ -40,6 +42,14 @@ class HomeController extends GetxController {
     filterdList.value = ApplyFilterDropDownModels.list[currentTabIndex.value];
     super.onInit();
   }
+  
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    coursesList.clear();
+  }
+  
 
   // Apply Filter Methods
   getListName(int index) {

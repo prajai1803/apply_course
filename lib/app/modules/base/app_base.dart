@@ -1,4 +1,5 @@
 import 'package:apply_course/app/modules/home/home_page_view.dart';
+import 'package:apply_course/app/modules/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class AppBase extends StatelessWidget {
       HomeScreen(),
       HomeScreen(),
       HomeScreen(),
-      HomeScreen(),
+      ProfileScreen(),
       // LoginScreen(),
     ];
 
