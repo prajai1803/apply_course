@@ -8,9 +8,8 @@ import 'package:get_storage/get_storage.dart';
 class HomeController extends GetxController {
   FirebaseProvider _firebaseProvider = FirebaseProvider();
 
-  // final coursesList = <CourseModel>[].obs;
+  final coursesListPermanant = List<CourseModel>.empty(growable: true).obs;
   final coursesList = List<CourseModel>.empty(growable: true).obs;
-
 
   // Apply Filter
   final currentTabIndex = 0.obs;
@@ -23,6 +22,7 @@ class HomeController extends GetxController {
   final fee = "".obs;
   final filterSearchController = "".obs;
   var filterdList = <String>[].obs;
+  var isFilterCleared = true.obs;
 
   final listOfFilter = [
     "Program Level",
@@ -34,7 +34,6 @@ class HomeController extends GetxController {
     "Fee",
   ];
 
-
   @override
   void onInit() {
     // TODO: implement onInit
@@ -42,14 +41,13 @@ class HomeController extends GetxController {
     filterdList.value = ApplyFilterDropDownModels.list[currentTabIndex.value];
     super.onInit();
   }
-  
+
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
     coursesList.clear();
   }
-  
 
   // Apply Filter Methods
   getListName(int index) {
@@ -71,6 +69,55 @@ class HomeController extends GetxController {
     }
   }
 
+  void filterSearch(value) async {
+    coursesList.value = [];
+    List<CourseModel> list = coursesListPermanant;
+    printInfo(info: programLevel.value);
+    if (value != "") {
+      coursesList.value = list
+          .where((element) =>
+              (element.courseName!.toLowerCase().contains(value)) &&
+              (method == "" ||
+                  element.programMethod!.toLowerCase() ==
+                      method.toLowerCase()) &&
+              ((duration == "") ||
+                  element.programLength!.toLowerCase() ==
+                      duration.toLowerCase()) &&
+              ((category == "") ||
+                  element.category!.toLowerCase() == category.toLowerCase()) &&
+              ((subCategory == "") ||
+                  element.subCategory!.toLowerCase() ==
+                      subCategory.toLowerCase()) &&
+              ((location == "") ||
+                  element.location!.toLowerCase() == location.toLowerCase()) &&
+              ((fee == "") ||
+                  element.location!.toLowerCase() == fee.toLowerCase()) &&
+              ((programLevel == "") ||
+                  element.programLevel!.toLowerCase() ==
+                      programLevel.toLowerCase()))
+          .toList();
+    } else {
+      printInfo(info: "yha a raha hai ki nahji");
+      print(coursesListPermanant);
+      coursesList.value = coursesListPermanant;
+    }
+  }
+
+  void clearFilter() {
+    print("heysdfsadfdsfsdsd");
+    isFilterCleared.value = false;
+    currentTabIndex.value = 0;
+    programLevel.value = "";
+    category.value = "";
+    subCategory.value = "";
+    method.value = "";
+    location.value = "";
+    duration.value = "";
+    fee.value = "";
+    changeCategory();
+    
+  }
+
   void changeCategory() {
     filterdList.value = ApplyFilterDropDownModels.list[currentTabIndex.value];
   }
@@ -79,30 +126,29 @@ class HomeController extends GetxController {
     var result = <String>[];
     if (filterSearchController.value.isEmpty) {
       result = ApplyFilterDropDownModels.list[currentTabIndex.value];
-    }else {
-      result = ApplyFilterDropDownModels.list[currentTabIndex.value].where((element) => element.toLowerCase().contains(key)).toList();
+    } else {
+      result = ApplyFilterDropDownModels.list[currentTabIndex.value]
+          .where((element) => element.toLowerCase().contains(key))
+          .toList();
     }
     filterdList.value = result;
-    print(filterdList.value);
   }
 
+  void ApplyFilter() {}
 
-  void getCourses() async {
+  Future<void> getCourses() async {
+    coursesList.value = [];
+    List<CourseModel> list =
+        await _firebaseProvider.getAllCourses();
+    coursesListPermanant.value = list;
+    coursesList.value = coursesListPermanant;
+  }
+
+  Future<void> reFreshCourse() async {
     coursesList.value = [];
     List<CourseModel> list = await _firebaseProvider.getAllCourses();
+    coursesListPermanant.value = list;
     coursesList.value = list;
   }
 
-  Future<void> reFreshCourse() async{
-    coursesList.value = [];
-    List<CourseModel> list = await _firebaseProvider.getAllCourses();
-    coursesList.value = list;
-  }
-
-  void search(String key) async{
-    coursesList.value = [];
-    List<CourseModel> list = await _firebaseProvider.getAllCourses();
-    coursesList.value = list.where((element) => element.courseName!.toLowerCase() == key).toList();
-
-  }
 }

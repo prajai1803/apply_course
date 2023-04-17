@@ -14,27 +14,31 @@ import '../../widgets/course_card.dart';
 class HomeScreen extends GetView {
   HomeScreen({super.key});
 
-  final _controller = Get.put(HomeController());
+  final _controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(onPressed: (){
+      //   // _controller.filterSearch("BCA");
+      //   _controller.clearFilter();
+      // },child: Icon(Icons.abc)),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () async {
       //     FirebaseFirestore _f = FirebaseFirestore.instance;
       //     CollectionReference c = _f.collection(KeysConstant.Courses);
       //     await c.doc().set(CourseModel(
-      //             courseName: "BCA",
+      //             courseName: "ITI",
       //             costOfLiving: 300,
       //             university: "Bilaspur University",
       //             category: "BCA",
-      //             courseId: 4579,
+      //             courseId: 4577,
       //             location: "Bilaspur, Chhattishgarh",
       //             minEducationLevel: "",
-      //             programLevel: ["Bachelor's Degree"],
-      //             programLength: "3-years",
+      //             programLevel: "Master's Degree",
+      //             programLength: "2-years",
       //             subCategory: "None",
-      //             programMethod: ["Online"],
+      //             programMethod: "Online",
       //             programSummary: "Lorem Isme",
       //             startDate: "20-03-2023",
       //             universityLogo:
@@ -45,8 +49,8 @@ class HomeScreen extends GetView {
       //                     minimumEducation: "12th",
       //                     minimumGpa: "6",
       //                     minimumLts: ["TCSl"])),
-      //             applicationFee: 20,
-      //             tutionFee: 5000)
+      //             applicationFee: 200,
+      //             tutionFee: 500)
       //         .toJson());
       //   },
       //   child: Icon(Icons.abc),
@@ -115,6 +119,9 @@ class HomeScreen extends GetView {
                       borderRadius: BorderRadius.circular(45),
                     ),
                     child: TextField(
+                      onChanged:(value) {
+                        _controller.filterSearch(value);
+                      },
                       style: Theme.of(context).textTheme.bodySmall,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(bottom: 0.72.h),
@@ -239,19 +246,17 @@ class HomeScreen extends GetView {
                           child: ListView.builder(
                             itemCount: _controller.coursesList.length,
                             itemBuilder: (context, index) {
-                              print(_controller.coursesList.length);
                               var data = _controller.coursesList[index];
-                              print(data.universityLogo);
                               return CourseCard(
                                 universityName: data.university,
                                 applicationFee: data.applicationFee,
-                                mode: data.programMethod![0],
+                                mode: data.programMethod,
                                 courseName: data.courseName,
-                                duration: data.programLength,
+                                duration: data.programLength,        
                                 location: data.location,
                                 courseLogo: data.universityLogo,
                                 tutionFee: data.tutionFee,
-                                programLevel: data.programLevel![0],
+                                programLevel: data.programLevel,
                               );
                             },
                           ),
