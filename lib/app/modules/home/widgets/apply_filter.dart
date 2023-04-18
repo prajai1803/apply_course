@@ -150,12 +150,13 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                                     return Obx(
                                      ()=> RadioMenuButton(
                                         value: _controller.filterdList[index],
-                                        groupValue: _controller
+                                        groupValue: _controller.isFilterCleared.value ? _controller
                                             .getListName(
                                                 _controller.currentTabIndex.value)
-                                            .value,
+                                            .value : null,
                                         onChanged: (value) {
-                                          printInfo(info: value!.toString());
+                                          // _controller.programLevel.value = value.toString();
+                                          _controller.isFilterCleared.value = true;
                                           _controller
                                               .getListName(_controller
                                                   .currentTabIndex.value)
@@ -191,9 +192,11 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TextButton(onPressed: () {
+                      _controller.clearFilter();
                       Get.back();
-                    }, child: Text("Cancel",style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.blue[800] ),)),
+                    }, child: Text("Clear Filter",style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.blue[800] ),)),
                     ElevatedButton(onPressed: (){
+                      _controller.ApplyFilter();
                       Get.back();
                     }, child: Text("Apply Filter",style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white),))
                   ],

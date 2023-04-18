@@ -36,14 +36,14 @@ class CourseModel {
     String? universityLogo;
     String? category;
     String? subCategory;
-    List<String>? programMethod;
+    String? programMethod;
     String? location;
     String? courseName;
     int? courseId;
     String? startDate;
     List<String>? images;
     String? programSummary;
-    List<String>? programLevel;
+    String? programLevel;
     String? programLength;
     int? costOfLiving;
     int? tutionFee;
@@ -57,14 +57,14 @@ class CourseModel {
         String? universityLogo,
         String? category,
         String? subCategory,
-        List<String>? programMethod,
+        String? programMethod,
         String? location,
         String? courseName,
         int? courseId,
         String? startDate,
         List<String>? images,
         String? programSummary,
-        List<String>? programLevel,
+        String? programLevel,
         String? programLength,
         int? costOfLiving,
         int? tutionFee,
@@ -100,17 +100,17 @@ class CourseModel {
         universityLogo: json["universityLogo"],
         category: json["category"],
         subCategory: json["subCategory"],
-        programMethod: json["programMethod"] == null ? [] : List<String>.from(json["programMethod"]!.map((x) => x)),
+        programMethod: json["programMethod"],
         location: json["location"],
         courseName: json["courseName"],
         courseId: json["courseId"],
         startDate: json["start_date"],
         images: json["images"] == null ? [] : List<String>.from(json["images"]!.map((x) => x)),
         programSummary: json["programSummary"],
-        programLevel: json["programLevel"] == null ? [] : List<String>.from(json["programLevel"]!.map((x) => x)),
+        programLevel: json["programLevel"],
         programLength: json["programLength"],
         costOfLiving: json["costOfLiving"],
-        tutionFee: json["tutionFee"],
+        tutionFee: json["tution_fee"],
         applicationFee: json["application_fee"],
         minEducationLevel: json["minEducationLevel"],
         admissionRequirement: json["admissionRequirement"] == null ? null : AdmissionRequirement.fromJson(json["admissionRequirement"]),
@@ -122,17 +122,17 @@ class CourseModel {
         "universityLogo": universityLogo,
         "category": category,
         "subCategory": subCategory,
-        "programMethod": programMethod == null ? [] : List<dynamic>.from(programMethod!.map((x) => x)),
+        "programMethod": programMethod,
         "location": location,
         "courseName": courseName,
         "courseId": courseId,
         "start_date": startDate,
         "images": images == null ? [] : List<dynamic>.from(images!.map((x) => x)),
         "programSummary": programSummary,
-        "programLevel": programLevel == null ? [] : List<dynamic>.from(programLevel!.map((x) => x)),
+        "programLevel": programLevel,
         "programLength": programLength,
         "costOfLiving": costOfLiving,
-        "tutionFee": tutionFee,
+        "tution_fee": tutionFee,
         "application_fee": applicationFee,
         "minEducationLevel": minEducationLevel,
         "admissionRequirement": admissionRequirement?.toJson(),

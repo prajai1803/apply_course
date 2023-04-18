@@ -10,6 +10,7 @@ class HomeController extends GetxController {
 
   final coursesListPermanant = List<CourseModel>.empty(growable: true).obs;
   final coursesList = List<CourseModel>.empty(growable: true).obs;
+  var isFilterLoading = false.obs;
 
   // Apply Filter
   final currentTabIndex = 0.obs;
@@ -145,10 +146,12 @@ class HomeController extends GetxController {
   }
 
   Future<void> reFreshCourse() async {
+    isFilterLoading.value = true;
     coursesList.value = [];
     List<CourseModel> list = await _firebaseProvider.getAllCourses();
     coursesListPermanant.value = list;
     coursesList.value = list;
+    isFilterLoading.value = false;
   }
 
 }

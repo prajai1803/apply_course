@@ -119,7 +119,7 @@ class HomeScreen extends GetView {
                       borderRadius: BorderRadius.circular(45),
                     ),
                     child: TextField(
-                      onChanged:(value) {
+                      onChanged: (value) {
                         _controller.filterSearch(value);
                       },
                       style: Theme.of(context).textTheme.bodySmall,
@@ -198,23 +198,24 @@ class HomeScreen extends GetView {
                       itemBuilder: (context, index) {
                         var name = _controller.listOfFilter[index];
                         return InkWell(
-                          onTap: (){
-                            _controller.currentTabIndex.value = index;
-                            _controller.changeCategory();
-                            showModalBottomSheet(
-                        context: context,
-                        // elevation: 100,
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        isScrollControlled: true,
-                        builder: (context) {
-                          return ApplyFilterWithBottomSheet();
-                        },
-                      );
-                            
-                          },
-                          child: CardButton(name: name,));
+                            onTap: () {
+                              _controller.currentTabIndex.value = index;
+                              _controller.changeCategory();
+                              showModalBottomSheet(
+                                context: context,
+                                // elevation: 100,
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30)),
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return ApplyFilterWithBottomSheet();
+                                },
+                              );
+                            },
+                            child: CardButton(
+                              name: name,
+                            ));
                       },
                     ),
                   ),
@@ -226,7 +227,8 @@ class HomeScreen extends GetView {
               child: Obx(
                 () => Container(
                   height: 40.h,
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
                   child: Text(
                     "${_controller.coursesList.length} Courses found",
                     style: GoogleFonts.openSans(
@@ -237,8 +239,41 @@ class HomeScreen extends GetView {
             ),
             Obx(
               () => Container(
-                child: _controller.coursesList.isNotEmpty
-                    ? Expanded(
+                child: _controller.isFilterLoading.value ?
+                    // ? Expanded(
+                    //     child: RefreshIndicator(
+                    //       onRefresh: () {
+                    //         return _controller.reFreshCourse();
+                    //       },
+                    //       child: ListView.builder(
+                    //         itemCount: _controller.coursesList.length,
+                    //         itemBuilder: (context, index) {
+                    //           var data = _controller.coursesList[index];
+                    //           return CourseCard(
+                    //             universityName: data.university,
+                    //             applicationFee: data.applicationFee,
+                    //             mode: data.programMethod,
+                    //             courseName: data.courseName,
+                    //             duration: data.programLength,
+                    //             location: data.location,
+                    //             courseLogo: data.universityLogo,
+                    //             tutionFee: data.tutionFee,
+                    //             programLevel: data.programLevel,
+                    //           );
+                    //         },
+                    //       ),
+                    //     ),
+                    //   )
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator()
+                      ],
+                    )
+                    : _controller.coursesList.isEmpty ?
+                    Center(child: Text("No Data Found!",style: Theme.of(context).textTheme.bodySmall,),):
+                    Expanded(
                         child: RefreshIndicator(
                           onRefresh: () {
                             return _controller.reFreshCourse();
@@ -252,7 +287,7 @@ class HomeScreen extends GetView {
                                 applicationFee: data.applicationFee,
                                 mode: data.programMethod,
                                 courseName: data.courseName,
-                                duration: data.programLength,        
+                                duration: data.programLength,
                                 location: data.location,
                                 courseLogo: data.universityLogo,
                                 tutionFee: data.tutionFee,
@@ -262,11 +297,8 @@ class HomeScreen extends GetView {
                           ),
                         ),
                       )
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      ),
               ),
-            )
+            ),
           ],
         ),
       ),
