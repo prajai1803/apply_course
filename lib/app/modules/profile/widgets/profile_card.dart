@@ -1,9 +1,105 @@
+import 'package:apply_course/app/modules/profile/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
+import 'profile_drop_down.dart';
+import 'profile_text_field.dart';
+
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key});
+  ProfileCard({super.key});
+
+  final _controller = Get.find<ProfileController>();
+
+  void _addData(context) {
+    Get.defaultDialog(
+      title: "Profile Edit",
+      titleStyle: Theme.of(context).textTheme.titleLarge,
+      content: SingleChildScrollView(
+        child: SizedBox(
+          height: 300.h,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    textEditingController: _controller.nameTextController,
+                    hintText: "Name",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    textEditingController: _controller.emailTextController,
+                    hintText: "Email",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    textEditingController:
+                        _controller.phoneNumberTextController,
+                    hintText: "Phone No.",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    textEditingController: _controller.locationTextController,
+                    hintText: "Location",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileDropDown(
+                    data: ["Male", "Female", "Trans"],
+                    hintText: "Gender",
+                    onChanged: (value) {
+                      _controller.genderTextController.text = value;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileDropDown(
+                    data: ["Married", "Unmarried"],
+                    hintText: "Marital Status",
+                    onChanged: (value) {
+                      _controller.maritalStatusTextController.text = value;
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        )),
+                    ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Save",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.white),
+                        ))
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +150,9 @@ class ProfileCard extends StatelessWidget {
                     Text("Prakhar Jaiswal",
                         style: Theme.of(context).textTheme.titleLarge),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _addData(context);
+                        },
                         icon: Icon(
                           Icons.edit_outlined,
                           size: 25.r,
@@ -90,11 +188,14 @@ class ProfileCard extends StatelessWidget {
                     size: 5,
                     padding: 0,
                     selectedGradientColor: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.blue[900]!.withOpacity(.5),Colors.blue[900]!],
-                              ),
-                              unselectedColor: Colors.blue.withOpacity(.2),
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.blue[900]!.withOpacity(.5),
+                        Colors.blue[900]!
+                      ],
+                    ),
+                    unselectedColor: Colors.blue.withOpacity(.2),
                   ),
                 ),
                 // Email and Phone Number
@@ -213,7 +314,6 @@ class ProfileCard extends StatelessWidget {
                   ),
                 ),
               ],
-              
             ),
           ],
         ),
