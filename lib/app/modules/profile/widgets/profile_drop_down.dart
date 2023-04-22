@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProfileDropDown extends StatelessWidget {
   String? hintText;
   List data = [];
-  Function(dynamic)? onChanged;
+  Function(dynamic value)? onChanged;
   ProfileDropDown({super.key, required this.data, this.hintText = "",required this.onChanged});
 
   @override

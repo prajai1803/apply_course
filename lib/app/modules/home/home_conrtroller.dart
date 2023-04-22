@@ -70,6 +70,33 @@ class HomeController extends GetxController {
     }
   }
 
+  void quickFilter() async {
+    coursesList.value = [];
+    List<CourseModel> list = coursesListPermanant;
+    printInfo(info: programLevel.value);
+      coursesList.value = list
+          .where((element) =>
+              (method == "" ||
+                  element.programMethod!.toLowerCase() ==
+                      method.toLowerCase()) &&
+              ((duration == "") ||
+                  element.programLength!.toLowerCase() ==
+                      duration.toLowerCase()) &&
+              ((category == "") ||
+                  element.category!.toLowerCase() == category.toLowerCase()) &&
+              ((subCategory == "") ||
+                  element.subCategory!.toLowerCase() ==
+                      subCategory.toLowerCase()) &&
+              ((location == "") ||
+                  element.location!.toLowerCase() == location.toLowerCase()) &&
+              ((fee == "") ||
+                  element.location!.toLowerCase() == fee.toLowerCase()) &&
+              ((programLevel == "") ||
+                  element.programLevel!.toLowerCase() ==
+                      programLevel.toLowerCase()))
+          .toList();
+  }
+
   void filterSearch(value) async {
     coursesList.value = [];
     List<CourseModel> list = coursesListPermanant;
@@ -116,7 +143,7 @@ class HomeController extends GetxController {
     duration.value = "";
     fee.value = "";
     changeCategory();
-    
+    quickFilter();
   }
 
   void changeCategory() {

@@ -28,16 +28,16 @@ class HomeScreen extends GetView {
       //     FirebaseFirestore _f = FirebaseFirestore.instance;
       //     CollectionReference c = _f.collection(KeysConstant.Courses);
       //     await c.doc().set(CourseModel(
-      //             courseName: "ITI",
+      //             courseName: "Master of Arts",
       //             costOfLiving: 300,
       //             university: "Bilaspur University",
-      //             category: "BCA",
-      //             courseId: 4577,
+      //             category: "Master of Arts",
+      //             courseId: 49,
       //             location: "Bilaspur, Chhattishgarh",
       //             minEducationLevel: "",
       //             programLevel: "Master's Degree",
       //             programLength: "2-years",
-      //             subCategory: "None",
+      //             subCategory: "Hindi",
       //             programMethod: "Online",
       //             programSummary: "Lorem Isme",
       //             startDate: "20-03-2023",
@@ -50,7 +50,7 @@ class HomeScreen extends GetView {
       //                     minimumGpa: "6",
       //                     minimumLts: ["TCSl"])),
       //             applicationFee: 200,
-      //             tutionFee: 500)
+      //             tutionFee: 6000)
       //         .toJson());
       //   },
       //   child: Icon(Icons.abc),

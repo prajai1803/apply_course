@@ -1,33 +1,25 @@
-import 'package:apply_course/app/modules/profile/profile_controller.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
-class ProfileTextField extends StatelessWidget {
-  TextEditingController? textEditingController;
+class ProfileDatePicker extends StatelessWidget {
+  String date = '';
   String? hintText;
-  bool isNumPad = false;
-  Function(dynamic value)? onChanged;
   Function()? onTap;
-  ProfileTextField({super.key,this.textEditingController,this.hintText = "",this.isNumPad = false,this.onChanged,this.onTap});
+  ProfileDatePicker({super.key,this.date = "",this.onTap,this.hintText});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50.h,
       child: TextFormField(
-        keyboardType: isNumPad ? TextInputType.phone : TextInputType.text,
         textAlignVertical: TextAlignVertical.center,
-        controller: textEditingController,
         style: Theme.of(context).textTheme.bodySmall,
         
-        onChanged: onChanged,
+        readOnly: true,
         onTap: onTap,
         decoration: InputDecoration(
           filled: true,
-          labelStyle: Theme.of(context).textTheme.bodySmall,
-            hintStyle: Theme.of(context).textTheme.bodySmall,
           enabledBorder: UnderlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
@@ -35,9 +27,11 @@ class ProfileTextField extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          // hintText: hintText
           labelText: hintText,
-          ),
+          labelStyle: Theme.of(context).textTheme.bodySmall,
+          hintStyle: Theme.of(context).textTheme.bodySmall,
+          hintText: date == ""? "Pick Date" : date,
+        ),
       ),
     );
   }

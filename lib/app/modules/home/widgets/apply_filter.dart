@@ -196,7 +196,8 @@ class ApplyFilterWithBottomSheet extends StatelessWidget {
                       Get.back();
                     }, child: Text("Clear Filter",style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.blue[800] ),)),
                     ElevatedButton(onPressed: (){
-                      _controller.ApplyFilter();
+                      _controller.quickFilter();
+                      // _controller.filterSearch("");
                       Get.back();
                     }, child: Text("Apply Filter",style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white),))
                   ],
