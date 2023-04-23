@@ -84,7 +84,6 @@ class YourStudyPrefrences extends StatelessWidget {
                               firstDate: DateTime(1950),
                               lastDate: DateTime(2050));
                           _controller.dobTextController.value =  DateFormat('dd-mm-yy').format(piackedDate!);
-                          
                         },
                         date: _controller.dobTextController.value,
                       ),

@@ -4,8 +4,157 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'profile_drop_down.dart';
+import 'profile_text_field.dart';
+
 class EducationWidget extends StatelessWidget {
   const EducationWidget({super.key});
+
+
+  void _addEducationYear(context) {
+    Get.defaultDialog(
+      title: "Test Score Edit",
+      titleStyle: Theme.of(context).textTheme.titleLarge,
+      content: SingleChildScrollView(
+        child: SizedBox(
+          height: 170.h,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Total year of education",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Total Backlog",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        )),
+                    ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Save",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.white),
+                        ))
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _addEducation(context) {
+    Get.defaultDialog(
+      title: "Test Score Edit",
+      titleStyle: Theme.of(context).textTheme.titleLarge,
+      content: SingleChildScrollView(
+        child: SizedBox(
+          height: 250.h,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileDropDown(
+                    hintText: "Education Level",
+                    data: ["10th", "12th", "Bachelor","Master"],
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileDropDown(
+                    hintText: "Course Name",
+                    data: ["10th", "12th", "Bachelor","Master"],
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "University Name",
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "CGPA",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileDropDown(
+                    hintText: "Started year",
+                    data: ["10th", "12th", "Bachelor","Master"],
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileDropDown(
+                    hintText: "Completed year",
+                    data: ["10th", "12th", "Bachelor","Master"],
+                    onChanged: (value) {},
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        )),
+                    ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Save",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.white),
+                        ))
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +171,9 @@ class EducationWidget extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _addEducation(context);
+                    },
                     icon: Icon(
                       Icons.add,
                       size: 25.r,
@@ -130,7 +281,9 @@ class EducationWidget extends StatelessWidget {
                       
                         ),
                     ),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.edit_outlined,color: Colors.blue,size: 28.r,)),
+                  IconButton(onPressed: (){
+                    _addEducationYear(context);
+                  }, icon: Icon(Icons.edit_outlined,color: Colors.blue,size: 28.r,)),
                   ],
                 ),
               ],

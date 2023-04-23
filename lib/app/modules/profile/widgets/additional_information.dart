@@ -4,8 +4,101 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'profile_drop_down.dart';
+import 'profile_text_field.dart';
+
 class AdditionalInformationWidget extends StatelessWidget {
   const AdditionalInformationWidget({super.key});
+
+
+  void _addData(context) {
+    Get.defaultDialog(
+      title: "Test Score Edit",
+      titleStyle: Theme.of(context).textTheme.titleLarge,
+      content: SingleChildScrollView(
+        child: SizedBox(
+          height: 300.h,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Contact Name",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Contact Number",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Email",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Relationship with applicatnt",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Mailing Address",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileTextField(
+                    hintText: "Permanent Address",
+                    isNumPad: true,
+                    onChanged: (value) {},
+                  ),
+                ),
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        )),
+                    ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Save",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.white),
+                        ))
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +115,20 @@ class AdditionalInformationWidget extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // showModalBottomSheet(
+                      //   context: context,
+                      //   // elevation: 100,
+                      //   backgroundColor: Colors.white,
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(30)),
+                      //   isScrollControlled: true,
+                      //   builder: (context) {
+                      //     return EditAdditionalInformation();
+                      //   },
+                      // );
+                      _addData(context);
+                    },
                     icon: Icon(
                       Icons.add,
                       size: 25.r,
