@@ -33,7 +33,8 @@ class YourStudyPrefrences extends StatelessWidget {
                       data: ApplyFilterDropDownModels.listOfLevel,
                       hintText: "Course Level",
                       onChanged: (value) {
-                        // _controller.courseLevel.value = value;
+                        _controller.courseLevel.text = value;
+                        print(_controller.courseLevel.value);
                       },
                     )),
                 Padding(
@@ -41,9 +42,10 @@ class YourStudyPrefrences extends StatelessWidget {
                   child: ProfileDropDown(
                     data: [
                       "India",
+                      "USA"
                     ],
                     onChanged: (value) {
-                      _controller.countryPrefrence.value = value;
+                      _controller.countryPrefrence.text = value;
                     },
                     hintText: "Country Prefrences",
                   ),
@@ -52,10 +54,12 @@ class YourStudyPrefrences extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileDropDown(
                     data: [
-                      "India",
+                      "Arts",
+                      "Engineering",
+                      "Business Management"
                     ],
                     onChanged: (value) {
-                      _controller.countryPrefrence.value = value;
+                      _controller.preferredCourse.text = value;
                     },
                     hintText: "Preferred Course",
                   ),
@@ -64,10 +68,10 @@ class YourStudyPrefrences extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileDropDown(
                     data: [
-                      "India",
+                      "Computer Science",
                     ],
                     onChanged: (value) {
-                      _controller.countryPrefrence.value = value;
+                      _controller.specialization.text = value;
                     },
                     hintText: "Specialization",
                   ),
@@ -75,25 +79,30 @@ class YourStudyPrefrences extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Obx(
-                      ()=> ProfileDatePicker(
+                      () => ProfileDatePicker(
                         hintText: "In Take",
+                        controller: _controller.inTake,
                         onTap: () async {
                           DateTime? piackedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(1950),
                               lastDate: DateTime(2050));
-                          _controller.dobTextController.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                          _controller.inTakeObs.value =
+                              DateFormat('dd-MM-yyyy').format(piackedDate!);
+                          _controller.inTake.text = DateFormat('dd-MM-yyyy').format(piackedDate);
+                          print(_controller.inTake.text);
                         },
-                        date: _controller.dobTextController.value,
+                        date: _controller.inTakeObs.value,
                       ),
                     )),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(hintText: "Budget",isNumPad: true,onChanged: (value) {
-                    _controller.budget = value;
-                  },)
-                ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Budget",
+                      isNumPad: true,
+                      textEditingController: _controller.budget,
+                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -106,7 +115,9 @@ class YourStudyPrefrences extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         )),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _controller.updateStudyPrefrences();
+                        },
                         child: Text(
                           "Save",
                           style: Theme.of(context)
@@ -127,284 +138,354 @@ class YourStudyPrefrences extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
-        // height: 351.h,
-        margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
-        child: Column(
-          children: [
-            // Heading
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Your Study Prefrences",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _addData(context);
-                    },
-                    icon: Icon(
-                      Icons.edit_outlined,
-                      size: 25.r,
-                      color: Colors.blue,
-                    ))
-              ],
-            ),
-            Divider(
-              thickness: 2,
-            ),
-            // course level and country
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: Obx(
+        ()=> Container(
+          // height: 351.h,
+          margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+          child: Column(
+            children: [
+              // Heading
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: _width * .4,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.book,
-                          color: Colors.green,
-                          size: 25.r,
-                        ),
-                        Expanded(
-                          child: Container(
-                            width: 150.w,
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Course Level",
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                                  child: Text(
-                                    "Master",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  Text(
+                    "Your Study Prefrences",
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.locationCrosshairs,
-                          color: Colors.blue,
-                          size: 25.r,
-                        ),
-                        Expanded(
-                          child: Container(
-                            width: 150.w,
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Conuntry Prefrences",
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                                  child: Text(
-                                    "India",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _controller.user.studyPrefrences != null
+                      ? IconButton(
+                          onPressed: () {
+                            _controller.getEditStudyPrefrenceData();
+                            _addData(context);
+                          },
+                          icon: Icon(
+                            Icons.edit_outlined,
+                            size: 25.r,
+                            color: Colors.blue,
+                          ))
+                      : Container(),
                 ],
               ),
-            ),
-            // Prefered course and Specialization
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: _width * .4,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.bookAtlas,
-                          color: Colors.purple,
-                          size: 25.r,
-                        ),
-                        Expanded(
-                          child: Container(
-                            width: 150.w,
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Preferred Course",
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                                  child: Text(
-                                    "Engineering",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.person,
-                          color: Colors.orange,
-                          size: 25.r,
-                        ),
-                        Expanded(
-                          child: Container(
-                            width: 150.w,
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Specialization",
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                                  child: Text(
-                                    "Computer Science & Engineering",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              const Divider(
+                thickness: 2,
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.calendar_month_outlined,
-                    color: Colors.cyan,
-                    size: 25.r,
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: 150.w,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "In-Take",
-                            style: Theme.of(context).textTheme.titleSmall,
+              // course level and country
+             (_controller.user.studyPrefrences != null && !_controller.isLoadingStudyPrefrences.value)
+                  ? Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 4.h),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: _width * .4,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.book,
+                                      color: Colors.green,
+                                      size: 25.r,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        width: 150.w,
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 8),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Course Level",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 2.h),
+                                              child: Text(
+                                                _controller.user.studyPrefrences!.courseLevel ?? "No Data",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.locationCrosshairs,
+                                      color: Colors.blue,
+                                      size: 25.r,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        width: 150.w,
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 8),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Country Prefrences",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 2.h),
+                                              child: Text(
+                                                _controller.user.studyPrefrences!.countryPrefrences ?? "No Data",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 2.h),
-                            child: Text(
-                              "Jun to July - 2024",
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          )
-                        ],
+                        ),
+                        // Prefered course and Specialization
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 4.h),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: _width * .4,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.bookAtlas,
+                                      color: Colors.purple,
+                                      size: 25.r,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        width: 150.w,
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 8),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Preferred Course",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 2.h),
+                                              child: Text(
+                                                _controller.user.studyPrefrences!.preferredCourse ?? "No Data",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.person,
+                                      color: Colors.orange,
+                                      size: 25.r,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        width: 150.w,
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 8),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Specialization",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 2.h),
+                                              child: Text(
+                                                _controller.user.studyPrefrences!.specialization ?? "No Data",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.h),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.calendar_month_outlined,
+                                color: Colors.cyan,
+                                size: 25.r,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  width: 150.w,
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "In-Take",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 2.h),
+                                        child: Text(
+                                          _controller.user.studyPrefrences!.inTake ?? "No Data",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.h),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.wallet,
+                                color: Colors.brown,
+                                size: 25.r,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  width: 150.w,
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Budget",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 2.h),
+                                        child: Text(
+                                          _controller.user.studyPrefrences!.budget.toString(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : (_controller.user.studyPrefrences == null && !_controller.isLoadingStudyPrefrences.value) ? Container(
+                      // height: 50,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10)),
+                      child: TextButton(
+                        onPressed: () {
+                          _controller.getEditStudyPrefrenceData();
+                          _addData(context);
+                        },
+                        child: Text(
+                          "Add Study Prefrence",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.red),
+                        ),
                       ),
+                    ) : Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.wallet,
-                    color: Colors.brown,
-                    size: 25.r,
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: 150.w,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Budget",
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 2.h),
-                            child: Text(
-                              "Add Budget",
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -10,11 +10,11 @@ class ProfileDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 56,
       child: DropdownButtonHideUnderline(
         child: ButtonTheme(
           alignedDropdown: true,
-          padding: EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           child: DropdownButtonFormField(
             style: Theme.of(context).textTheme.bodySmall,
               decoration: InputDecoration(

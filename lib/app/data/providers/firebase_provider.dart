@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:apply_course/app/data/models/course_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,7 +56,6 @@ class FirebaseProvider {
     try {
       UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
-      var token = await userCredential.user!.getIdToken();
       if (!userCredential.user!.emailVerified) {
         userCredential.user!.sendEmailVerification();
       }
@@ -68,7 +65,6 @@ class FirebaseProvider {
         phoneNumber: userCredential.user!.phoneNumber ?? "",
         photoUrl: userCredential.user!.photoURL ?? "",
         uid: userCredential.user!.uid,
-        token: token,
         emailVerified: userCredential.user!.emailVerified,
       );
       await _storageProvider.writeUserModel(userModel);
@@ -101,15 +97,16 @@ class FirebaseProvider {
           await _firebaseAuth.signInWithCredential(cred);
       UserModel userModel = UserModel(
         email: userCredential.user!.email,
-        displayName: userCredential.user!.displayName ?? "",
-        phoneNumber: userCredential.user!.phoneNumber ?? "",
-        photoUrl: userCredential.user!.photoURL ?? "",
+        displayName: userCredential.user!.displayName,
+        phoneNumber: userCredential.user!.phoneNumber,
+        photoUrl: userCredential.user!.photoURL,
         uid: userCredential.user!.uid,
         emailVerified: true,
       );
-      printInfo(info: userCredential.user!.emailVerified.toString());
-      await _storageProvider.writeUserModel(userModel);
-      await users.doc(userCredential.user!.uid).set(userModel.toJson());
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        await users.doc(userCredential.user!.uid).set(userModel.toJson());
+        await _storageProvider.writeUserModel(userModel);
+      }
       return true;
     } catch (e) {
       printInfo(info: e.toString());
@@ -129,26 +126,28 @@ class FirebaseProvider {
     }
   }
 
-  // Future<CourseModel> getall() async{
-  //   CollectionReference courses = _firestore.collection(KeysConstant.Courses);
-  //   QuerySnapshot querySnapshot = await courses.get();
-  //   final a = querySnapshot.docs.map((e) => CourseModel.fromJson(e.data() as Map<String,dynamic>));
-  //   return a;
-  // }
-
-  Future<List<CourseModel>> getAllCourses() async{
+  Future<List<CourseModel>> getAllCourses() async {
     List<CourseModel> list = [];
     CollectionReference courses = _firestore.collection(KeysConstant.Courses);
     QuerySnapshot querySnapshot = await courses.get();
     final qurryList = querySnapshot.docs;
-    list = qurryList.map((e) => CourseModel.fromJson(e.data() as Map<String,dynamic>)).toList();
+    list = qurryList
+        .map((e) => CourseModel.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
     return list;
-    // CourseModel a = await querySnapshot.docs.map((e) => CourseModel.fromJson(e.data() as Map<String,dynamic>));
-    // printInfo(info: a.courseName!);
+  }
 
-    
-    // QuerySnapshot<Object?> a = await courses.get();
-    
-    
+  Future<bool> updateProfile(UserModel newUser) async {
+    try {
+      CollectionReference userCollection = _firestore.collection(KeysConstant.users);
+      UserModel user = await _storageProvider.readUserModel();
+      DocumentReference doc = userCollection.doc(user.uid);
+      await doc.update(newUser.toJson());
+      _storageProvider.writeUserModel(newUser);
+      return true;
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+      return false;
+    }
   }
 }

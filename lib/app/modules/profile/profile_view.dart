@@ -14,7 +14,7 @@ import 'widgets/your_study_prefrences.dart';
 class ProfileScreen extends GetView<ProfileController> {
   ProfileScreen({super.key});
 
-  // final _controller = Get.find<ProfileController>();
+  final _controller = Get.find<ProfileController>();
   final _height = ScreenUtil().screenHeight;
   final _width = ScreenUtil().screenWidth;
 
@@ -23,10 +23,10 @@ class ProfileScreen extends GetView<ProfileController> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 245, 255),
       body: SafeArea(
-        child: Container(
+        child:  Container(
           padding: EdgeInsets.symmetric(horizontal: 14.w,vertical: 14.h),
           child: SingleChildScrollView(
-            child: Column(
+            child: !_controller.isLoading.value ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -41,6 +41,11 @@ class ProfileScreen extends GetView<ProfileController> {
                 AdditionalInformationWidget(),
                 LORDeailsWidget(),
               ],
+            ) :  SizedBox(
+              height: _height,
+              child:const Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
           ),
         ),
