@@ -103,7 +103,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  void getImage() async {
+  void pickImage() async {
     pickedFile = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 20);
     if (pickedFile != null) {
