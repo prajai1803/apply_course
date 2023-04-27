@@ -2,6 +2,7 @@ import 'package:apply_course/app/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 import 'profile_data_time.dart';
 import 'profile_text_field.dart';
@@ -72,14 +73,14 @@ class ExperienceWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileTextField(
                     hintText: "Jobs Role",
-                    onChanged: (value) {},
+                    textEditingController: _controller.experiencejobRole,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileTextField(
                     hintText: "Company Name",
-                    onChanged: (value) {},
+                    textEditingController: _controller.experienceCompanyName,
                   ),
                 ),
                 Padding(
@@ -92,8 +93,10 @@ class ExperienceWidget extends StatelessWidget {
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1950),
                           lastDate: DateTime(2050));
-                      // _controller.dobTextController.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                      _controller.experienceStartedDate.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                      
                     },
+                    date: _controller.experienceStartedDate.value,
                   ),
                 ),
                 Padding(
@@ -106,15 +109,16 @@ class ExperienceWidget extends StatelessWidget {
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1950),
                           lastDate: DateTime(2050));
-                      // _controller.dobTextController.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                      _controller.experienceEndedDate.value =  DateFormat('dd-mm-yy').format(piackedDate!);
                     },
+                    date: _controller.experienceEndedDate.value,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileTextField(
                     hintText: "Description",
-                    onChanged: (value) {},
+                    textEditingController: _controller.experiencejobDescription,
                   ),
                 ),
                 Row(
@@ -166,6 +170,7 @@ class ExperienceWidget extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {
+                        _controller.getExperienceData();
                         _addData(context);
                       },
                       icon: Icon(
@@ -216,13 +221,21 @@ class ExperienceWidget extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                IconButton(
-                                    onPressed: () {},
+                                Row(
+                                  children: [
+                                    
+                                        IconButton(
+                                    onPressed: () {
+                                      _controller.deleteExperience(index);
+                                    },
                                     icon: Icon(
-                                      Icons.edit_outlined,
-                                      color: Colors.blue,
+                                      Icons.delete,
+                                      color: Colors.red,
                                       size: 25.r,
                                     ))
+                                  ],
+                                ),
+                                    
                               ],
                             ),
                             Padding(

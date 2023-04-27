@@ -49,8 +49,8 @@ class ProfileController extends GetxController {
   // Experience
   late TextEditingController experiencejobRole;
   late TextEditingController experienceCompanyName;
-  late TextEditingController experienceStartedDate;
-  late TextEditingController experienceEndedDate;
+  RxString experienceStartedDate = ''.obs;
+  RxString experienceEndedDate = ''.obs;
   late TextEditingController experiencejobDescription;
 
   // Additional Information
@@ -207,6 +207,12 @@ class ProfileController extends GetxController {
     }
   }
 
+  void getExperienceData() {
+    experiencejobRole = TextEditingController();
+    experienceCompanyName = TextEditingController();
+    experiencejobDescription = TextEditingController();
+  }
+
   void updateProfileCard() async {
     Get.back();
     isLoadingProfileCard.value = true;
@@ -263,18 +269,20 @@ class ProfileController extends GetxController {
     if (user.experience != null) {
       tempList = user.experience!.listOfJobs ?? [];
     }
-    experiencejobRole = TextEditingController();
-    experienceCompanyName = TextEditingController();
-    experienceStartedDate = TextEditingController();
-    experienceEndedDate = TextEditingController();
-    experiencejobDescription = TextEditingController();
-    // tempList.add(Job(
-    //   jobRole: experiencejobRole.text.isEmpty ? null : experiencejobRole.text,
-    //   companyName: experienceCompanyName.text.isEmpty ? null : experienceCompanyName.text,
-    //   startedData: experienceStartedDate.text.isEmpty ? null : experienceCompanyName.text,
-    //   endedData: experienceEndedDate.text.isEmpty ? null : experienceEndedDate.text,
-    //   jobDescription: experiencejobDescription.text.isEmpty ? null : experiencejobDescription.text,
-    // ));
+    tempList.add(Job(
+      jobRole: experiencejobRole.text.isEmpty ? null : experiencejobRole.text,
+      companyName: experienceCompanyName.text.isEmpty
+          ? null
+          : experienceCompanyName.text,
+      startedData: experienceStartedDate.value.isEmpty
+          ? null
+          : experienceStartedDate.value,
+      endedData:
+          experienceEndedDate.value.isEmpty ? null : experienceEndedDate.value,
+      jobDescription: experiencejobDescription.text.isEmpty
+          ? null
+          : experiencejobDescription.text,
+    ));
     var success = await _firebaseProvider.updateProfile(
         user.copyWith(experience: Experience(listOfJobs: tempList)));
     getUserData();
@@ -285,6 +293,25 @@ class ProfileController extends GetxController {
       isLoadingExperience.value = false;
     }
   }
+
+  void deleteExperience(index) async {
+    isLoadingExperience.value = true;
+    List<Job> tempList = [];
+    if (user.experience != null) {
+      tempList = user.experience!.listOfJobs ?? [];
+    }
+    tempList.removeAt(index);
+    var success = await _firebaseProvider.updateProfile(
+        user.copyWith(experience: Experience(listOfJobs: tempList)));
+    getUserData();
+    if (success) {
+      isLoadingExperience.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingExperience.value = false;
+    }
+  }
+  
 
   void updateAdditionalInformation() async {
     Get.back();
