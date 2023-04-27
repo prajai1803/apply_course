@@ -7,7 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'profile_text_field.dart';
 
 class LORDeailsWidget extends StatelessWidget {
-  const LORDeailsWidget({super.key});
+  LORDeailsWidget({super.key});
+
+  final _controller = Get.find<ProfileController>();
 
   void _addData(context) {
     Get.defaultDialog(
@@ -127,7 +129,7 @@ class LORDeailsWidget extends StatelessWidget {
                   "LOR Details",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                IconButton(
+               _controller.user.lorDetails != null ? IconButton(
                     onPressed: () {
                       _addData(context);
                     },
@@ -135,14 +137,14 @@ class LORDeailsWidget extends StatelessWidget {
                       Icons.add,
                       size: 25.r,
                       color: Colors.blue,
-                    ))
+                    )) : Container()
               ],
             ),
             const Divider(
               thickness: 1.5,
             ),
             // make a widget class for the listing
-            Column(
+            (_controller.user.lorDetails != null && !_controller.isLoadingLORDetails.value) ?Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -292,7 +294,28 @@ class LORDeailsWidget extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            ) : (_controller.user.lorDetails == null && !_controller.isLoadingLORDetails.value) ? Container(
+                        // height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: TextButton(
+                          onPressed: () {
+                            _controller.getAdditionalInformationEdit();
+                            _addData(context);
+                          },
+                          child: Text(
+                            "Add Latter Of Recommedation",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.red),
+                          ),
+                        ),
+                      ) : Center(
+                        child: CircularProgressIndicator(),
+                      ),
           ],
         ),
       ),

@@ -2,14 +2,14 @@ import 'package:apply_course/app/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'profile_data_time.dart';
 import 'profile_text_field.dart';
 
 class ExperienceWidget extends StatelessWidget {
-  const ExperienceWidget({super.key});
+  ExperienceWidget({super.key});
 
+  final _controller = Get.find<ProfileController>();
 
   void _addWorkExperience(context) {
     Get.defaultDialog(
@@ -68,18 +68,10 @@ class ExperienceWidget extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: ProfileDropDown(
-                //     hintText: "Test",
-                //     data: ["GMAT", "GRE", "PTE"],
-                //     onChanged: (value) {},
-                //   ),
-                // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileTextField(
-                    hintText: "Jobs Post",
+                    hintText: "Jobs Role",
                     onChanged: (value) {},
                   ),
                 ),
@@ -137,7 +129,9 @@ class ExperienceWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         )),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _controller.updateExperience();
+                        },
                         child: Text(
                           "Save",
                           style: Theme.of(context)
@@ -158,92 +152,187 @@ class ExperienceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Experience",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _addData(context);
-                    },
-                    icon: Icon(
-                      Icons.add,
-                      size: 25.r,
-                      color: Colors.blue,
-                    ))
-              ],
-            ),
-            Divider(
-              thickness: 1.5,
-            ),
-            // make a widget class for the listing
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.work_outline,size: 25.r,),
-                        Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Text("Better Jobs",style: Theme.of(context).textTheme.titleSmall,),
+      child: Obx(
+        () => Container(
+          margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Experience",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        _addData(context);
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        size: 25.r,
+                        color: Colors.blue,
+                      ))
+                ],
+              ),
+              Divider(
+                thickness: 1.5,
+              ),
+              // make a widget class for the listing
+              (_controller.user.experience != null &&
+                      !_controller.isLoadingExperience.value)
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount:
+                          _controller.user.experience!.listOfJobs!.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.work_outline,
+                                      size: 25.r,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 8),
+                                      child: Text(
+                                        _controller
+                                                .user
+                                                .experience!
+                                                .listOfJobs![index]
+                                                .companyName ??
+                                            "No Data",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.edit_outlined,
+                                      color: Colors.blue,
+                                      size: 25.r,
+                                    ))
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 32, bottom: 2.h),
+                              child: Text(
+                                _controller.user.experience!.listOfJobs![index]
+                                        .jobRole ??
+                                    "No Data",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 32, bottom: 2.h),
+                              child: Text(
+                                "${_controller.user.experience!.listOfJobs![index].startedData ?? "No Data"} - ${_controller.user.experience!.listOfJobs![index].endedData ?? "No Data"}",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 32),
+                              child: Text(
+                                _controller.user.experience!.listOfJobs![index].jobDescription ?? "No Data",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Divider(
+                              thickness: 1.5,
+                            ),
+                          ],
+                        );
+                      },
                     )
-                      ],
+                  : (_controller.user.experience == null &&
+                          !_controller.isLoadingExperience.value)
+                      ? Container(
+                          // height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: TextButton(
+                            onPressed: () {
+                              _controller.getEditStudyPrefrenceData();
+                              _addData(context);
+                            },
+                            child: Text(
+                              "Add Experience",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(color: Colors.red),
+                            ),
+                          ),
+                        )
+                      : Center(
+                          child: CircularProgressIndicator(),
+                        ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.work,
+                            color: Colors.brown,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Text(
+                              "Total Work Experience",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          )
+                        ],
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            _addWorkExperience(context);
+                          },
+                          icon: Icon(
+                            Icons.edit_outlined,
+                            color: Colors.blue,
+                            size: 25.r,
+                          ))
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 32,
                     ),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.edit_outlined,color: Colors.blue,size: 25.r,))
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 32,bottom: 2.h),
-                  child: Text("Flutter Developer",style: Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w500,color: Colors.black),),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 32,bottom: 2.h),
-                  child: Text("01 March, 2023 - 12 Apr,2023",style: Theme.of(context).textTheme.bodySmall,),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 32),
-                  child: Text("Description",style: Theme.of(context).textTheme.bodySmall,),
-                ),
-              ],
-            ),
-            Divider(thickness: 1.5,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.work,color: Colors.brown,),
-                        Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Text("Total Work Experience",style: Theme.of(context).textTheme.titleSmall,),
-                    )
-                      ],
+                    child: Text(
+                      "1 Years",
+                      style: Theme.of(context).textTheme.bodySmall!,
                     ),
-                    IconButton(onPressed: (){
-                      _addWorkExperience(context);
-                    }, icon: Icon(Icons.edit_outlined,color: Colors.blue,size: 25.r,))
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 32,),  
-                  child: Text("1 Years",style: Theme.of(context).textTheme.bodySmall!,),
-                ),
-              ],
-            )
-          ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

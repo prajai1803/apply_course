@@ -1,5 +1,6 @@
 import 'package:apply_course/app/core/values/keys.dart';
 import 'package:apply_course/app/data/models/course_model.dart';
+import 'package:apply_course/app/data/providers/firebase_provider.dart';
 import 'package:apply_course/app/modules/home/home_conrtroller.dart';
 import 'package:apply_course/app/modules/home/widgets/apply_filter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,10 +20,10 @@ class HomeScreen extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(onPressed: (){
-      //   // _controller.filterSearch("BCA");
-      //   _controller.clearFilter();
-      // },child: Icon(Icons.abc)),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        // _controller.filterSearch("BCA");
+        FirebaseProvider().test();
+      },child: Icon(Icons.abc)),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () async {
       //     FirebaseFirestore _f = FirebaseFirestore.instance;

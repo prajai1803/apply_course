@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:apply_course/app/data/models/user_model.dart';
 import 'package:apply_course/app/data/providers/firebase_provider.dart';
 import 'package:apply_course/app/data/providers/storage_provider.dart';
@@ -13,6 +15,9 @@ class ProfileController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isLoadingProfileCard = false.obs;
   RxBool isLoadingStudyPrefrences = false.obs;
+  RxBool isLoadingExperience = false.obs;
+  RxBool isLoadingAdditionalInformation = false.obs;
+  RxBool isLoadingLORDetails = false.obs;
 
   int profileStatus = 0;
 
@@ -35,6 +40,30 @@ class ProfileController extends GetxController {
   RxString inTakeObs = "".obs;
   late TextEditingController budget;
 
+  // Experience
+  late TextEditingController experiencejobRole;
+  late TextEditingController experienceCompanyName;
+  late TextEditingController experienceStartedDate;
+  late TextEditingController experienceEndedDate;
+  late TextEditingController experiencejobDescription;
+
+  // Additional Information
+  late TextEditingController additionalCantactName;
+  late TextEditingController additionalCantactNumber;
+  late TextEditingController additionalEmail;
+  late TextEditingController additionalRelastionship;
+  late TextEditingController additionalMailingAddress;
+  late TextEditingController additionalPermanentAddress;
+
+  // Lor details page
+  late TextEditingController lorContactName;
+  late TextEditingController lorContactNumber;
+  late TextEditingController lorEmail;
+  late TextEditingController recommededBy;
+  late TextEditingController lorJobRole;
+  late TextEditingController lorCompanyName;
+  late TextEditingController postalAddress;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -52,7 +81,7 @@ class ProfileController extends GetxController {
   void getUserData() async {
     user = await _storageProvider.readUserModel();
     isLoading.value = false;
-    print(user.studyPrefrences!.courseLevel);
+    print(user.experience!.listOfJobs!);
   }
 
   // Assign when we open add dialogue
@@ -92,6 +121,49 @@ class ProfileController extends GetxController {
     }
   }
 
+  void getAdditionalInformationEdit() {
+    additionalCantactName = TextEditingController();
+    additionalCantactNumber = TextEditingController();
+    additionalEmail = TextEditingController();
+    additionalRelastionship = TextEditingController();
+    additionalMailingAddress = TextEditingController();
+    additionalPermanentAddress = TextEditingController();
+
+    if (user.additionalInformation != null) {
+      additionalCantactName.text =
+          user.additionalInformation!.contactName ?? "";
+      additionalCantactNumber.text =
+          user.additionalInformation!.contactNumber ?? "";
+      additionalEmail.text = user.additionalInformation!.email ?? "";
+      additionalRelastionship.text =
+          user.additionalInformation!.relationshipWithApplicant ?? "";
+      additionalMailingAddress.text =
+          user.additionalInformation!.mailingAdress ?? "";
+      additionalPermanentAddress.text =
+          user.additionalInformation!.permanentAddress ?? "";
+    }
+  }
+
+  void getLORDetailsEdit() {
+    lorContactName = TextEditingController();
+    lorContactNumber = TextEditingController();
+    lorEmail = TextEditingController();
+    recommededBy = TextEditingController();
+    lorJobRole = TextEditingController();
+    lorCompanyName = TextEditingController();
+    postalAddress = TextEditingController();
+
+    if (user.lorDetails != null) {
+      lorContactName.text = user.lorDetails!.name ?? "";
+      lorContactNumber.text = user.lorDetails!.contactNumber ?? "";
+      lorEmail.text = user.lorDetails!.email ?? "";
+      lorJobRole.text = user.lorDetails!.jobRole ?? "";
+      recommededBy.text = user.lorDetails!.recommededBy ?? "";
+      lorCompanyName.text = user.lorDetails!.companyName ?? "";
+      postalAddress.text = user.lorDetails!.postalAddress ?? "";
+    }
+  }
+
   void updateProfileCard() async {
     Get.back();
     isLoadingProfileCard.value = true;
@@ -119,7 +191,6 @@ class ProfileController extends GetxController {
     Get.back();
     isLoadingStudyPrefrences.value = true;
     int? tempBudget = int.tryParse(budget.text);
-    print(courseLevel.text);
     var success = await _firebaseProvider.updateProfile(user.copyWith(
       studyPrefrences: StudyPrefrences(
         courseLevel: courseLevel.text.isEmpty ? null : courseLevel.text,
@@ -139,6 +210,68 @@ class ProfileController extends GetxController {
       Get.snackbar("Successfull", "Updated the profile");
     } else {
       isLoadingStudyPrefrences.value = false;
+    }
+  }
+
+  void updateExperience() async {
+    Get.back();
+    isLoadingExperience.value = true;
+    List<Job> tempList = [];
+    if (user.experience != null) {
+      tempList = user.experience!.listOfJobs ?? [];
+    }
+    experiencejobRole = TextEditingController();
+    experienceCompanyName = TextEditingController();
+    experienceStartedDate = TextEditingController();
+    experienceEndedDate = TextEditingController();
+    experiencejobDescription = TextEditingController();
+    // tempList.add(Job(
+    //   jobRole: experiencejobRole.text.isEmpty ? null : experiencejobRole.text,
+    //   companyName: experienceCompanyName.text.isEmpty ? null : experienceCompanyName.text,
+    //   startedData: experienceStartedDate.text.isEmpty ? null : experienceCompanyName.text,
+    //   endedData: experienceEndedDate.text.isEmpty ? null : experienceEndedDate.text,
+    //   jobDescription: experiencejobDescription.text.isEmpty ? null : experiencejobDescription.text,
+    // ));
+    var success = await _firebaseProvider.updateProfile(
+        user.copyWith(experience: Experience(listOfJobs: tempList)));
+    getUserData();
+    if (success) {
+      isLoadingExperience.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingExperience.value = false;
+    }
+  }
+
+  void updateAdditionalInformation() async {
+    Get.back();
+    isLoadingAdditionalInformation.value = true;
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+      additionalInformation: AdditionalInformation(
+        contactName: additionalCantactName.text.isEmpty
+            ? null
+            : additionalCantactName.text,
+        contactNumber: additionalCantactNumber.text.isEmpty
+            ? null
+            : additionalCantactNumber.text,
+        email: additionalEmail.text.isEmpty ? null : additionalEmail.text,
+        relationshipWithApplicant: additionalRelastionship.text.isEmpty
+            ? null
+            : additionalRelastionship.text,
+        mailingAdress: additionalMailingAddress.text.isEmpty
+            ? null
+            : additionalMailingAddress.text,
+        permanentAddress: additionalPermanentAddress.text.isEmpty
+            ? null
+            : additionalPermanentAddress.text,
+      ),
+    ));
+    getUserData();
+    if (success) {
+      isLoadingAdditionalInformation.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingAdditionalInformation.value = false;
     }
   }
 }

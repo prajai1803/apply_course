@@ -298,11 +298,11 @@ class Experience {
         this.totalWorkExperience,
     });
 
-    List<ListOfJob>? listOfJobs;
+    List<Job>? listOfJobs;
     int? totalWorkExperience;
 
     Experience copyWith({
-        List<ListOfJob>? listOfJobs,
+        List<Job>? listOfJobs,
         int? totalWorkExperience,
     }) => 
         Experience(
@@ -311,7 +311,7 @@ class Experience {
         );
 
     factory Experience.fromJson(Map<String, dynamic> json) => Experience(
-        listOfJobs: json["listOfJobs"] == null ? [] : List<ListOfJob>.from(json["listOfJobs"]!.map((x) => ListOfJob.fromJson(x))),
+        listOfJobs: json["listOfJobs"] == null ? [] : List<Job>.from(json["listOfJobs"]!.map((x) => Job.fromJson(x))),
         totalWorkExperience: json["totalWorkExperience"],
     );
 
@@ -321,8 +321,8 @@ class Experience {
     };
 }
 
-class ListOfJob {
-    ListOfJob({
+class Job {
+    Job({
         this.jobRole,
         this.companyName,
         this.jobDescription,
@@ -336,14 +336,14 @@ class ListOfJob {
     String? startedData;
     String? endedData;
 
-    ListOfJob copyWith({
+    Job copyWith({
         String? jobRole,
         String? companyName,
         String? jobDescription,
         String? startedData,
         String? endedData,
     }) => 
-        ListOfJob(
+        Job(
             jobRole: jobRole ?? this.jobRole,
             companyName: companyName ?? this.companyName,
             jobDescription: jobDescription ?? this.jobDescription,
@@ -351,7 +351,7 @@ class ListOfJob {
             endedData: endedData ?? this.endedData,
         );
 
-    factory ListOfJob.fromJson(Map<String, dynamic> json) => ListOfJob(
+    factory Job.fromJson(Map<String, dynamic> json) => Job(
         jobRole: json["jobRole"],
         companyName: json["companyName"],
         jobDescription: json["jobDescription"],

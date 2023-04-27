@@ -106,6 +106,10 @@ class FirebaseProvider {
       if (userCredential.additionalUserInfo!.isNewUser) {
         await users.doc(userCredential.user!.uid).set(userModel.toJson());
         await _storageProvider.writeUserModel(userModel);
+      }else {
+         var res = await users.doc(userCredential.user!.uid).get();
+         UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
+         await _storageProvider.writeUserModel(user);
       }
       return true;
     } catch (e) {
@@ -115,6 +119,13 @@ class FirebaseProvider {
     }
   }
 
+  Future<void> test () async{
+    CollectionReference users = _firestore.collection(KeysConstant.users);
+    var user = await users.doc("bCNhVWcddKcy8HadMt7ccAdg1CE2").get();
+    var res = user.data();
+    UserModel u = UserModel.fromJson(res as Map<String, dynamic> );
+    print(u.additionalInformation!.contactName);
+  }
   Future<bool> sendVerificationEmail() async {
     try {
       await _firebaseAuth.currentUser!.sendEmailVerification();
