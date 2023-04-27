@@ -1,15 +1,19 @@
-import 'dart:math';
-
+import 'dart:io';
 import 'package:apply_course/app/data/models/user_model.dart';
 import 'package:apply_course/app/data/providers/firebase_provider.dart';
 import 'package:apply_course/app/data/providers/storage_provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends GetxController {
   final StorageProvider _storageProvider = StorageProvider();
   final FirebaseProvider _firebaseProvider = FirebaseProvider();
   late UserModel user;
+
+  // Add Picture Controller
+  var selectedImagePath = ''.obs;
+  var selectedImageSize = ''.obs;
 
   // Loading and State management
   RxBool isLoading = false.obs;
@@ -21,6 +25,8 @@ class ProfileController extends GetxController {
 
   int profileStatus = 0;
 
+  // For pickingImage
+  XFile? pickedFile;
   // Form Text Fields
 
   // profile
@@ -76,6 +82,43 @@ class ProfileController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+  }
+
+  void uploadImage() async {
+    isLoadingProfileCard.value = true;
+    var url =
+        await _firebaseProvider.uploadImage(user.uid, File(pickedFile!.path));
+    if (url != 'null') {
+      var success =
+          await _firebaseProvider.updateProfile(user.copyWith(photoUrl: url));
+      getUserData();
+      if (success) {
+        isLoadingProfileCard.value = false;
+        selectedImagePath.value = '';
+        Get.snackbar("Success", "");
+      } else {
+        isLoadingProfileCard.value = false;
+        selectedImagePath.value = '';
+      }
+    }
+  }
+
+  void getImage() async {
+    pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 20);
+    if (pickedFile != null) {
+      selectedImagePath.value = pickedFile!.path;
+      selectedImageSize.value =
+          ((File(selectedImagePath.value)).lengthSync() / 1024 / 1024)
+                  .toStringAsFixed(2) +
+              " Mb";
+      print(selectedImageSize);
+    } else {
+      Get.snackbar('Error', 'No image selected',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
   }
 
   void getUserData() async {

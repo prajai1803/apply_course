@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:apply_course/app/modules/profile/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -127,23 +128,68 @@ class ProfileCard extends StatelessWidget {
                     // part 1
                     Column(
                       children: [
+                        Obx(() => _controller.selectedImagePath.value==''?
                         Container(
                           height: 117.w,
-                          width: 117.w,
-                          // child: Image.asset("assets/get_started.png")
-                          decoration: BoxDecoration(
-                              color: Colors.purple,
-                              borderRadius: BorderRadius.circular(5)),
+                            width: 117.w,
+                            color: Colors.blue[900],
+                            padding: const EdgeInsets.all(2),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                      image: NetworkImage(_controller.user.photoUrl!),
+                                      fit: BoxFit.cover,
+                                    ),
+                              ),
+                            ),
+                        )
+                        : InkWell(
+                          onTap: (){
+                               _controller.pickImage();
+                          },
+                          child: Container(
+                            height: 117.w,
+                              width: 117.w,
+                              padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.blue[900],
+                                ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(
+                                    image: FileImage(File(_controller.selectedImagePath.value)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                          ),
+                        ),  
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 4.h),
                           child: Container(
-                            height: 27.h,
+                            height: 30.h,
                             color: Colors.grey[100],
-                            child: TextButton(
-                              onPressed: () {},
+                            child: _controller.selectedImagePath.value==''? TextButton(
+                              onPressed: () {
+                               _controller.pickImage();
+                              },
                               child: Text(
-                                "Add Picture",
+                                "Change Picture",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(color: Colors.green),
+                              ),
+                            ) : TextButton(
+                              onPressed: () {
+                              //  _controller.getImage();
+                              _controller.uploadImage();
+                              },
+                              child: Text(
+                                "Upload",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!

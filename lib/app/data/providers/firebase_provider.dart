@@ -1,6 +1,7 @@
 import 'package:apply_course/app/data/models/course_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -11,6 +12,7 @@ import 'storage_provider.dart';
 class FirebaseProvider {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   final StorageProvider _storageProvider = StorageProvider();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -106,10 +108,10 @@ class FirebaseProvider {
       if (userCredential.additionalUserInfo!.isNewUser) {
         await users.doc(userCredential.user!.uid).set(userModel.toJson());
         await _storageProvider.writeUserModel(userModel);
-      }else {
-         var res = await users.doc(userCredential.user!.uid).get();
-         UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
-         await _storageProvider.writeUserModel(user);
+      } else {
+        var res = await users.doc(userCredential.user!.uid).get();
+        UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
+        await _storageProvider.writeUserModel(user);
       }
       return true;
     } catch (e) {
@@ -119,13 +121,14 @@ class FirebaseProvider {
     }
   }
 
-  Future<void> test () async{
+  Future<void> test() async {
     CollectionReference users = _firestore.collection(KeysConstant.users);
     var user = await users.doc("bCNhVWcddKcy8HadMt7ccAdg1CE2").get();
     var res = user.data();
-    UserModel u = UserModel.fromJson(res as Map<String, dynamic> );
+    UserModel u = UserModel.fromJson(res as Map<String, dynamic>);
     print(u.additionalInformation!.contactName);
   }
+
   Future<bool> sendVerificationEmail() async {
     try {
       await _firebaseAuth.currentUser!.sendEmailVerification();
@@ -150,7 +153,8 @@ class FirebaseProvider {
 
   Future<bool> updateProfile(UserModel newUser) async {
     try {
-      CollectionReference userCollection = _firestore.collection(KeysConstant.users);
+      CollectionReference userCollection =
+          _firestore.collection(KeysConstant.users);
       UserModel user = await _storageProvider.readUserModel();
       DocumentReference doc = userCollection.doc(user.uid);
       await doc.update(newUser.toJson());
@@ -159,6 +163,20 @@ class FirebaseProvider {
     } catch (e) {
       Get.snackbar("Error", e.toString());
       return false;
+    }
+  }
+
+  Future<String> uploadImage(name, file) async {
+    try {
+      final ref = await _firebaseStorage
+          .ref()
+          .child('displayProfile/$name')
+          .putFile(file);
+      final url = await ref.ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+      return 'null';
     }
   }
 }
