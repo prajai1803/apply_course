@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class HomeController extends GetxController {
-  FirebaseProvider _firebaseProvider = FirebaseProvider();
+  final FirebaseProvider _firebaseProvider = FirebaseProvider();
 
   final coursesListPermanant = List<CourseModel>.empty(growable: true).obs;
   final coursesList = List<CourseModel>.empty(growable: true).obs;

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:apply_course/app/data/models/user_model.dart';
 import 'package:apply_course/app/data/providers/firebase_provider.dart';
 import 'package:apply_course/app/data/providers/storage_provider.dart';
+import 'package:apply_course/app/modules/profile/widgets/test_score.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +23,7 @@ class ProfileController extends GetxController {
   RxBool isLoadingExperience = false.obs;
   RxBool isLoadingAdditionalInformation = false.obs;
   RxBool isLoadingLORDetails = false.obs;
+  RxBool isLoadingTestScore = false.obs;
 
   int profileStatus = 0;
 
@@ -64,11 +66,17 @@ class ProfileController extends GetxController {
   // Lor details page
   late TextEditingController lorContactName;
   late TextEditingController lorContactNumber;
+  late TextEditingController lorCompanyName;
   late TextEditingController lorEmail;
+  late TextEditingController lorRelationship;
   late TextEditingController recommededBy;
   late TextEditingController lorJobRole;
-  late TextEditingController lorCompanyName;
   late TextEditingController postalAddress;
+
+  // Test Score
+  late TextEditingController testType;
+  late TextEditingController score;
+  RxString examDate = ''.obs;
 
   @override
   void onInit() {
@@ -128,6 +136,12 @@ class ProfileController extends GetxController {
   }
 
   // Assign when we open add dialogue
+
+  void getEditTestScore () {
+    testType = TextEditingController();
+    score = TextEditingController();
+  }
+
   void getEditData() {
     // initialize when it call
     nameController = TextEditingController();
@@ -262,6 +276,33 @@ class ProfileController extends GetxController {
     }
   }
 
+  void updateLORDetails() async {
+    Get.back();
+    isLoadingLORDetails.value = true;
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+      lorDetails: LorDetails(
+        companyName: lorCompanyName.text,
+        name: lorContactName.text,
+        contactNumber: lorContactNumber.text,
+        email: lorEmail.text,
+        jobRole: lorJobRole.text,
+        designation: lorJobRole.text,
+        postalAddress: postalAddress.text,
+        recommededBy: recommededBy.text,
+        relationToStudent: lorRelationship.text,
+      ),
+      ),
+    );
+    getUserData();
+    if (success) {
+      isLoadingLORDetails.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingLORDetails.value = false;
+    }
+  }
+
+  // Experience CRUD
   void updateExperience() async {
     Get.back();
     isLoadingExperience.value = true;
@@ -311,7 +352,6 @@ class ProfileController extends GetxController {
       isLoadingExperience.value = false;
     }
   }
-  
 
   void updateAdditionalInformation() async {
     Get.back();
@@ -342,6 +382,53 @@ class ProfileController extends GetxController {
       Get.snackbar("Successfull", "Updated the profile");
     } else {
       isLoadingAdditionalInformation.value = false;
+    }
+  }
+
+  void addTestScore() async {
+    Get.back();
+    isLoadingTestScore.value = true;
+    List<Test> tempList = [];
+    if (user.testScore != null) {
+      tempList = user.testScore!.listOfTest ?? [];
+    }
+    tempList.add(
+      Test(
+        date: examDate.value.isEmpty ? null : examDate.value,
+        testName: testType.text.isEmpty ? null : testType.text,
+        testScore: score.text.isEmpty ? null : score.text,
+      )
+    );
+    var success = await _firebaseProvider.updateProfile(
+        user.copyWith(testScore: TestScore(
+          listOfTest: tempList,
+        )));
+    getUserData();
+    if (success) {
+      isLoadingTestScore.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingTestScore.value = false;
+    }
+  }
+
+  void deleteTestScore(index) async {
+    isLoadingTestScore.value = true;
+    List<Test> tempList = [];
+    if (user.testScore != null) {
+      tempList = user.testScore!.listOfTest ?? [];
+    }
+    tempList.removeAt(index);
+    var success = await _firebaseProvider.updateProfile(
+        user.copyWith(testScore: TestScore(
+          listOfTest: tempList,
+        )));
+    getUserData();
+    if (success) {
+      isLoadingTestScore.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingTestScore.value = false;
     }
   }
 }

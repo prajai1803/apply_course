@@ -30,7 +30,9 @@ class TestScoreWidget extends StatelessWidget {
                   child: ProfileDropDown(
                     hintText: "Test",
                     data: ["GMAT", "GRE", "PTE"],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _controller.testType.text = value;
+                    },
                   ),
                 ),
                 Padding(
@@ -38,7 +40,7 @@ class TestScoreWidget extends StatelessWidget {
                   child: ProfileTextField(
                     hintText: "Score",
                     isNumPad: true,
-                    onChanged: (value) {},
+                    textEditingController: _controller.score,
                   ),
                 ),
                 Padding(
@@ -51,8 +53,9 @@ class TestScoreWidget extends StatelessWidget {
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1950),
                           lastDate: DateTime(2050));
-                      // _controller.dobTextController.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                      _controller.examDate.value =  DateFormat('dd-mm-yy').format(piackedDate!);
                     },
+                    date: _controller.examDate.value,
                   ),
                 ),
                 Row(
@@ -67,7 +70,9 @@ class TestScoreWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         )),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _controller.addTestScore();
+                        },
                         child: Text(
                           "Save",
                           style: Theme.of(context)
@@ -88,110 +93,109 @@ class TestScoreWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Test Scores",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _addData(context);
-                    },
-                    icon: Icon(
-                      Icons.add,
-                      size: 25.r,
-                      color: Colors.blue,
-                    ))
-              ],
-            ),
-            Divider(
-              thickness: 1.5,
-            ),
-            // make a widget class for the listing
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 95.w,
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Text(
-                            'PTE',
+      child: Obx(
+        ()=> Container(
+          margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Test Scores",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        _controller.getEditTestScore();
+                        _addData(context);
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        size: 25.r,
+                        color: Colors.blue,
+                      ))
+                ],
+              ),
+              Divider(
+                thickness: 1.5,
+              ),
+              // make a widget class for the listing
+              (_controller.user.testScore != null &&
+                        !_controller.isLoadingTestScore.value)
+                    ? ListView.builder(
+                itemCount: _controller.user.testScore!.listOfTest!.length,
+                shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 95.w,
+                            padding: const EdgeInsets.only(right: 16),
+                            child: Text(
+                              _controller.user.testScore!.listOfTest![0].testName ?? "",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ),
+                          Text(
+                            '70',
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
-                        ),
-                        Text(
-                          '70',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '05 Apr,2022',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            color: Colors.blue,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 95.w,
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Text(
-                            'DUOLINGO',
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '05 Apr,2022',
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
-                        ),
-                        Text(
-                          '70',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '05 Apr,2022',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            color: Colors.blue,
+                          IconButton(
+                            onPressed: () {
+                              _controller.deleteTestScore(index);
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  );
+              },) : (_controller.user.testScore == null &&
+                            !_controller.isLoadingTestScore.value)
+                        ? Container(
+                            // height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextButton(
+                              onPressed: () {
+                                _controller.getEditTestScore();
+                                _addData(context);
+                              },
+                              child: Text(
+                                "Add Test Score",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.red),
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: CircularProgressIndicator(),
                           ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+              
+            ],
+          ),
         ),
       ),
     );

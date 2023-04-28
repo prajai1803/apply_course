@@ -497,17 +497,17 @@ class TestScore {
         this.listOfTest,
     });
 
-    List<ListOfTest>? listOfTest;
+    List<Test>? listOfTest;
 
     TestScore copyWith({
-        List<ListOfTest>? listOfTest,
+        List<Test>? listOfTest,
     }) => 
         TestScore(
             listOfTest: listOfTest ?? this.listOfTest,
         );
 
     factory TestScore.fromJson(Map<String, dynamic> json) => TestScore(
-        listOfTest: json["listOfTest"] == null ? [] : List<ListOfTest>.from(json["listOfTest"]!.map((x) => ListOfTest.fromJson(x))),
+        listOfTest: json["listOfTest"] == null ? [] : List<Test>.from(json["listOfTest"]!.map((x) => Test.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -515,8 +515,8 @@ class TestScore {
     };
 }
 
-class ListOfTest {
-    ListOfTest({
+class Test {
+    Test({
         this.testName,
         this.testScore,
         this.date,
@@ -526,18 +526,18 @@ class ListOfTest {
     String? testScore;
     String? date;
 
-    ListOfTest copyWith({
+    Test copyWith({
         String? testName,
         String? testScore,
         String? date,
     }) => 
-        ListOfTest(
+        Test(
             testName: testName ?? this.testName,
             testScore: testScore ?? this.testScore,
             date: date ?? this.date,
         );
 
-    factory ListOfTest.fromJson(Map<String, dynamic> json) => ListOfTest(
+    factory Test.fromJson(Map<String, dynamic> json) => Test(
         testName: json["testName"],
         testScore: json["testScore"],
         date: json["date"],
