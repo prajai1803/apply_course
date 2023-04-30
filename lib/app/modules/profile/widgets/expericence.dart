@@ -14,7 +14,7 @@ class ExperienceWidget extends StatelessWidget {
 
   void _addWorkExperience(context) {
     Get.defaultDialog(
-      title: "Test Score Edit",
+      title: "Experience Edit",
       titleStyle: Theme.of(context).textTheme.titleLarge,
       content: SingleChildScrollView(
         child: SizedBox(
@@ -26,7 +26,8 @@ class ExperienceWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileTextField(
                     hintText: "Total Work Experience",
-                    onChanged: (value) {},
+                    isNumPad: true,
+                    textEditingController: _controller.totalWorkExperience,
                   ),
                 ),
                 Row(
@@ -41,7 +42,9 @@ class ExperienceWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         )),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _controller.updateTotalWorkExperience();
+                        },
                         child: Text(
                           "Save",
                           style: Theme.of(context)
@@ -61,7 +64,7 @@ class ExperienceWidget extends StatelessWidget {
 
   void _addData(context) {
     Get.defaultDialog(
-      title: "Test Score Edit",
+      title: "Experience Edit",
       titleStyle: Theme.of(context).textTheme.titleLarge,
       content: SingleChildScrollView(
         child: SizedBox(
@@ -87,31 +90,35 @@ class ExperienceWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileDatePicker(
                     hintText: "Start Date",
+                    controller: _controller.experienceStartedDate,
                     onTap: () async {
                       DateTime? piackedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1950),
                           lastDate: DateTime(2050));
-                      _controller.experienceStartedDate.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                          _controller.experienceStartedDateObs.value = DateFormat('dd-MM-yy').format(piackedDate!);
+                      _controller.experienceStartedDate.text =  DateFormat('dd-MM-yy').format(piackedDate);
                       
                     },
-                    date: _controller.experienceStartedDate.value,
+                    date: _controller.experienceStartedDateObs.value,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileDatePicker(
                     hintText: "End Date",
+                    controller: _controller.experienceEndedDate,
                     onTap: () async {
                       DateTime? piackedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1950),
                           lastDate: DateTime(2050));
-                      _controller.experienceEndedDate.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                        _controller.experienceEndedDateObs.value = DateFormat('dd-MM-yyyy').format(piackedDate!);
+                      _controller.experienceEndedDate.text =  DateFormat('dd-MM-yyyy').format(piackedDate);
                     },
-                    date: _controller.experienceEndedDate.value,
+                    date: _controller.experienceEndedDateObs.value,
                   ),
                 ),
                 Padding(
@@ -255,7 +262,7 @@ class ExperienceWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32, bottom: 2.h),
                               child: Text(
-                                "${_controller.user.experience!.listOfJobs![index].startedData ?? "No Data"} - ${_controller.user.experience!.listOfJobs![index].endedData ?? "No Data"}",
+                                "${_controller.user.experience!.listOfJobs![index].startedDate ?? "No Data"} - ${_controller.user.experience!.listOfJobs![index].endedDate ?? "No Data"}",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ),
@@ -286,7 +293,7 @@ class ExperienceWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10)),
                           child: TextButton(
                             onPressed: () {
-                              _controller.getEditStudyPrefrenceData();
+                              _controller.getExperienceData();
                               _addData(context);
                             },
                             child: Text(
@@ -324,6 +331,7 @@ class ExperienceWidget extends StatelessWidget {
                       ),
                       IconButton(
                           onPressed: () {
+                            _controller.getEditTotalWorkExperience();
                             _addWorkExperience(context);
                           },
                           icon: Icon(
@@ -338,7 +346,7 @@ class ExperienceWidget extends StatelessWidget {
                       left: 32,
                     ),
                     child: Text(
-                      "1 Years",
+                      "${_controller.user.experience!.totalWorkExperience ?? 0} Years",
                       style: Theme.of(context).textTheme.bodySmall!,
                     ),
                   ),

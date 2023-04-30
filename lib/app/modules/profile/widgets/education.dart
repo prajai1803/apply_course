@@ -1,14 +1,18 @@
 import 'package:apply_course/app/modules/profile/profile_controller.dart';
+import 'package:apply_course/app/modules/profile/widgets/profile_data_time.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'profile_drop_down.dart';
 import 'profile_text_field.dart';
 
 class EducationWidget extends StatelessWidget {
-  const EducationWidget({super.key});
+  EducationWidget({super.key});
+
+  final _controller = Get.find<ProfileController>();
 
 
   void _addEducationYear(context) {
@@ -84,46 +88,67 @@ class EducationWidget extends StatelessWidget {
                   child: ProfileDropDown(
                     hintText: "Education Level",
                     data: ["10th", "12th", "Bachelor","Master"],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _controller.educationLevel.text = value;
+                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
+                  child: ProfileTextField(
                     hintText: "Course Name",
-                    data: ["10th", "12th", "Bachelor","Master"],
-                    onChanged: (value) {},
+                    textEditingController: _controller.courseName,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileTextField(
                     hintText: "University Name",
-                    onChanged: (value) {},
+                    textEditingController: _controller.university,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileTextField(
-                    hintText: "CGPA",
+                    hintText: "Percentage",
                     isNumPad: true,
-                    onChanged: (value) {},
+                    textEditingController: _controller.achievedMarks,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
-                    hintText: "Started year",
-                    data: ["10th", "12th", "Bachelor","Master"],
-                    onChanged: (value) {},
+                  child: ProfileDatePicker(
+                    hintText: "Start Date",
+                    // controller: _controller.experienceStartedDate,
+                    onTap: () async {
+                      DateTime? piackedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1950),
+                          lastDate: DateTime(2050));
+                          // _controller.experienceStartedDateObs.value = DateFormat('dd-MM-yy').format(piackedDate!);
+                      // _controller.experienceStartedDate.text =  DateFormat('dd-MM-yy').format(piackedDate);
+                      
+                    },
+                    // date: _controller.experienceStartedDateObs.value,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
-                    hintText: "Completed year",
-                    data: ["10th", "12th", "Bachelor","Master"],
-                    onChanged: (value) {},
+                  child: ProfileDatePicker(
+                    hintText: "Start Date",
+                    // controller: _controller.experienceStartedDate,
+                    onTap: () async {
+                      DateTime? piackedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1950),
+                          lastDate: DateTime(2050));
+                          // _controller.experienceStartedDateObs.value = DateFormat('dd-MM-yy').format(piackedDate!);
+                      // _controller.experienceStartedDate.text =  DateFormat('dd-MM-yy').format(piackedDate);
+                      
+                    },
+                    // date: _controller.experienceStartedDateObs.value,
                   ),
                 ),
                 Row(
@@ -185,7 +210,15 @@ class EducationWidget extends StatelessWidget {
               thickness: 1.5,
             ),
             // make a widget class for the listing
-            Column(
+            (_controller.user.education != null &&
+                      !_controller.isLoadingEducation.value)
+                  ? ListView.builder(
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -220,8 +253,36 @@ class EducationWidget extends StatelessWidget {
                   child: Text("2019 - 2023",style: Theme.of(context).textTheme.bodySmall,),
                 ),
               ],
-            ),
-            Divider(thickness: 1.5,),
+            );
+              },
+
+            ) : (_controller.user.education == null &&
+                          !_controller.isLoadingEducation.value)
+                      ? Container(
+                          // height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: TextButton(
+                            onPressed: () {
+                              _controller.getEditEducation();
+                              _addEducation(context);
+                            },
+                            child: Text(
+                              "Add Education",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(color: Colors.red),
+                            ),
+                          ),
+                        )
+                      : const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+            
+            const Divider(thickness: 1.5,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

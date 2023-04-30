@@ -47,15 +47,17 @@ class TestScoreWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileDatePicker(
                     hintText: "Exam Date",
+                    controller: _controller.examDate,
                     onTap: () async {
                       DateTime? piackedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1950),
                           lastDate: DateTime(2050));
-                      _controller.examDate.value =  DateFormat('dd-mm-yy').format(piackedDate!);
+                          _controller.examDateObs.value = DateFormat('dd-MM-yyyy').format(piackedDate!);
+                      _controller.examDate.text =  DateFormat('dd-MM-yyyy').format(piackedDate);
                     },
-                    date: _controller.examDate.value,
+                    date: _controller.examDateObs.value,
                   ),
                 ),
                 Row(
@@ -144,7 +146,7 @@ class TestScoreWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '70',
+                            _controller.user.testScore!.listOfTest![index].testScore!,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ],
@@ -152,7 +154,7 @@ class TestScoreWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '05 Apr,2022',
+                            _controller.user.testScore!.listOfTest![index].date!,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                           IconButton(

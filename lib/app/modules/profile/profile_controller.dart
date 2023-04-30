@@ -24,6 +24,7 @@ class ProfileController extends GetxController {
   RxBool isLoadingAdditionalInformation = false.obs;
   RxBool isLoadingLORDetails = false.obs;
   RxBool isLoadingTestScore = false.obs;
+  RxBool isLoadingEducation = false.obs;
 
   int profileStatus = 0;
 
@@ -51,9 +52,14 @@ class ProfileController extends GetxController {
   // Experience
   late TextEditingController experiencejobRole;
   late TextEditingController experienceCompanyName;
-  RxString experienceStartedDate = ''.obs;
-  RxString experienceEndedDate = ''.obs;
+  late TextEditingController experienceStartedDate;
+  late TextEditingController experienceEndedDate;
+  RxString experienceStartedDateObs = ''.obs;
+  RxString experienceEndedDateObs = ''.obs;
   late TextEditingController experiencejobDescription;
+
+  // Total work experience
+  late TextEditingController totalWorkExperience;
 
   // Additional Information
   late TextEditingController additionalCantactName;
@@ -76,7 +82,20 @@ class ProfileController extends GetxController {
   // Test Score
   late TextEditingController testType;
   late TextEditingController score;
-  RxString examDate = ''.obs;
+  late TextEditingController examDate;
+  RxString examDateObs = ''.obs;
+
+  // Education
+  late TextEditingController educationLevel;
+  late TextEditingController courseName;
+  late TextEditingController university;
+  late TextEditingController cityOfEducation;
+  late TextEditingController stateOfEducation;
+  late TextEditingController countyOfEducation;
+  late TextEditingController gradingSystem;
+  late TextEditingController achievedMarks;
+  late TextEditingController educationStartedData;
+  late TextEditingController educationEndedDate;
 
   @override
   void onInit() {
@@ -129,17 +148,35 @@ class ProfileController extends GetxController {
     }
   }
 
+  void getEditEducation() async {
+    educationLevel = TextEditingController();
+    courseName = TextEditingController();
+    university = TextEditingController();
+    cityOfEducation = TextEditingController();
+    stateOfEducation = TextEditingController();
+    countyOfEducation = TextEditingController();
+    gradingSystem = TextEditingController();
+    achievedMarks = TextEditingController();
+    educationStartedData = TextEditingController();
+    educationEndedDate = TextEditingController();
+  }
+
   void getUserData() async {
     user = await _storageProvider.readUserModel();
     isLoading.value = false;
     print(user.experience!.listOfJobs!);
   }
 
+  void getEditTotalWorkExperience() {
+    totalWorkExperience = TextEditingController();
+  }
+
   // Assign when we open add dialogue
 
-  void getEditTestScore () {
+  void getEditTestScore() {
     testType = TextEditingController();
     score = TextEditingController();
+    examDate = TextEditingController();
   }
 
   void getEditData() {
@@ -225,6 +262,29 @@ class ProfileController extends GetxController {
     experiencejobRole = TextEditingController();
     experienceCompanyName = TextEditingController();
     experiencejobDescription = TextEditingController();
+    experienceStartedDate = TextEditingController();
+    experienceEndedDate = TextEditingController();
+  }
+
+  void updateTotalWorkExperience() async {
+    Get.back();
+    isLoadingExperience.value = true;
+    int total = 0;
+    if (totalWorkExperience.text.isNotEmpty) {
+      total = int.tryParse(totalWorkExperience.text) ?? 0;
+    }
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        experience: Experience(
+      listOfJobs: user.experience!.listOfJobs,
+      totalWorkExperience: total,
+    )));
+    getUserData();
+    if (success) {
+      isLoadingExperience.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingExperience.value = false;
+    }
   }
 
   void updateProfileCard() async {
@@ -279,18 +339,19 @@ class ProfileController extends GetxController {
   void updateLORDetails() async {
     Get.back();
     isLoadingLORDetails.value = true;
-    var success = await _firebaseProvider.updateProfile(user.copyWith(
-      lorDetails: LorDetails(
-        companyName: lorCompanyName.text,
-        name: lorContactName.text,
-        contactNumber: lorContactNumber.text,
-        email: lorEmail.text,
-        jobRole: lorJobRole.text,
-        designation: lorJobRole.text,
-        postalAddress: postalAddress.text,
-        recommededBy: recommededBy.text,
-        relationToStudent: lorRelationship.text,
-      ),
+    var success = await _firebaseProvider.updateProfile(
+      user.copyWith(
+        lorDetails: LorDetails(
+          companyName: lorCompanyName.text,
+          name: lorContactName.text,
+          contactNumber: lorContactNumber.text,
+          email: lorEmail.text,
+          jobRole: lorJobRole.text,
+          designation: lorJobRole.text,
+          postalAddress: postalAddress.text,
+          recommededBy: recommededBy.text,
+          relationToStudent: lorRelationship.text,
+        ),
       ),
     );
     getUserData();
@@ -306,6 +367,10 @@ class ProfileController extends GetxController {
   void updateExperience() async {
     Get.back();
     isLoadingExperience.value = true;
+    var total = 0;
+    if (user.experience != null) {
+      total = user.experience!.totalWorkExperience ?? 0;
+    }
     List<Job> tempList = [];
     if (user.experience != null) {
       tempList = user.experience!.listOfJobs ?? [];
@@ -315,17 +380,18 @@ class ProfileController extends GetxController {
       companyName: experienceCompanyName.text.isEmpty
           ? null
           : experienceCompanyName.text,
-      startedData: experienceStartedDate.value.isEmpty
+      startedDate: experienceStartedDate.text.isEmpty
           ? null
-          : experienceStartedDate.value,
-      endedData:
-          experienceEndedDate.value.isEmpty ? null : experienceEndedDate.value,
+          : experienceStartedDate.text,
+      endedDate:
+          experienceEndedDate.text.isEmpty ? null : experienceEndedDate.text,
       jobDescription: experiencejobDescription.text.isEmpty
           ? null
           : experiencejobDescription.text,
     ));
-    var success = await _firebaseProvider.updateProfile(
-        user.copyWith(experience: Experience(listOfJobs: tempList)));
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        experience:
+            Experience(listOfJobs: tempList, totalWorkExperience: total)));
     getUserData();
     if (success) {
       isLoadingExperience.value = false;
@@ -392,17 +458,15 @@ class ProfileController extends GetxController {
     if (user.testScore != null) {
       tempList = user.testScore!.listOfTest ?? [];
     }
-    tempList.add(
-      Test(
-        date: examDate.value.isEmpty ? null : examDate.value,
-        testName: testType.text.isEmpty ? null : testType.text,
-        testScore: score.text.isEmpty ? null : score.text,
-      )
-    );
-    var success = await _firebaseProvider.updateProfile(
-        user.copyWith(testScore: TestScore(
-          listOfTest: tempList,
-        )));
+    tempList.add(Test(
+      date: examDate.text.isEmpty ? null : examDate.text,
+      testName: testType.text.isEmpty ? null : testType.text,
+      testScore: score.text.isEmpty ? null : score.text,
+    ));
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        testScore: TestScore(
+      listOfTest: tempList,
+    )));
     getUserData();
     if (success) {
       isLoadingTestScore.value = false;
@@ -419,10 +483,10 @@ class ProfileController extends GetxController {
       tempList = user.testScore!.listOfTest ?? [];
     }
     tempList.removeAt(index);
-    var success = await _firebaseProvider.updateProfile(
-        user.copyWith(testScore: TestScore(
-          listOfTest: tempList,
-        )));
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        testScore: TestScore(
+      listOfTest: tempList,
+    )));
     getUserData();
     if (success) {
       isLoadingTestScore.value = false;

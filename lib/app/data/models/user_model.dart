@@ -218,77 +218,77 @@ class Education {
 class ListOfEducation {
     ListOfEducation({
         this.level,
+        this.university,
         this.cityOfEducation,
         this.stateOfEducation,
         this.countryOfEducation,
         this.courseName,
         this.gradingSystem,
         this.achievedMarks,
-        this.languageOfInstruction,
-        this.startedData,
-        this.endedData,
+        this.startedDate,
+        this.endedDate,
     });
 
     String? level;
+    String? university;
     String? cityOfEducation;
     String? stateOfEducation;
     String? countryOfEducation;
     String? courseName;
     String? gradingSystem;
     int? achievedMarks;
-    String? languageOfInstruction;
-    String? startedData;
-    String? endedData;
+    String? startedDate;
+    String? endedDate;
 
     ListOfEducation copyWith({
         String? level,
+        String? university,
         String? cityOfEducation,
         String? stateOfEducation,
         String? countryOfEducation,
         String? courseName,
         String? gradingSystem,
         int? achievedMarks,
-        String? languageOfInstruction,
-        String? startedData,
-        String? endedData,
+        String? startedDate,
+        String? endedDate,
     }) => 
         ListOfEducation(
             level: level ?? this.level,
+            university: university ?? this.university,
             cityOfEducation: cityOfEducation ?? this.cityOfEducation,
             stateOfEducation: stateOfEducation ?? this.stateOfEducation,
             countryOfEducation: countryOfEducation ?? this.countryOfEducation,
             courseName: courseName ?? this.courseName,
             gradingSystem: gradingSystem ?? this.gradingSystem,
             achievedMarks: achievedMarks ?? this.achievedMarks,
-            languageOfInstruction: languageOfInstruction ?? this.languageOfInstruction,
-            startedData: startedData ?? this.startedData,
-            endedData: endedData ?? this.endedData,
+            startedDate: startedDate ?? this.startedDate,
+            endedDate: endedDate ?? this.endedDate,
         );
 
     factory ListOfEducation.fromJson(Map<String, dynamic> json) => ListOfEducation(
         level: json["level"],
+        university: json["university"],
         cityOfEducation: json["cityOfEducation"],
         stateOfEducation: json["stateOfEducation"],
         countryOfEducation: json["countryOfEducation"],
         courseName: json["courseName"],
         gradingSystem: json["gradingSystem"],
         achievedMarks: json["achievedMarks"],
-        languageOfInstruction: json["languageOfInstruction"],
-        startedData: json["startedData"],
-        endedData: json["endedData"],
+        startedDate: json["startedDate"],
+        endedDate: json["endedDate"],
     );
 
     Map<String, dynamic> toJson() => {
         "level": level,
+        "university": university,
         "cityOfEducation": cityOfEducation,
         "stateOfEducation": stateOfEducation,
         "countryOfEducation": countryOfEducation,
         "courseName": courseName,
         "gradingSystem": gradingSystem,
         "achievedMarks": achievedMarks,
-        "languageOfInstruction": languageOfInstruction,
-        "startedData": startedData,
-        "endedData": endedData,
+        "startedDate": startedDate,
+        "endedDate": endedDate,
     };
 }
 
@@ -326,45 +326,45 @@ class Job {
         this.jobRole,
         this.companyName,
         this.jobDescription,
-        this.startedData,
-        this.endedData,
+        this.startedDate,
+        this.endedDate,
     });
 
     String? jobRole;
     String? companyName;
     String? jobDescription;
-    String? startedData;
-    String? endedData;
+    String? startedDate;
+    String? endedDate;
 
     Job copyWith({
         String? jobRole,
         String? companyName,
         String? jobDescription,
-        String? startedData,
-        String? endedData,
+        String? startedDate,
+        String? endedDate,
     }) => 
         Job(
             jobRole: jobRole ?? this.jobRole,
             companyName: companyName ?? this.companyName,
             jobDescription: jobDescription ?? this.jobDescription,
-            startedData: startedData ?? this.startedData,
-            endedData: endedData ?? this.endedData,
+            startedDate: startedDate ?? this.startedDate,
+            endedDate: endedDate ?? this.endedDate,
         );
 
     factory Job.fromJson(Map<String, dynamic> json) => Job(
         jobRole: json["jobRole"],
         companyName: json["companyName"],
         jobDescription: json["jobDescription"],
-        startedData: json["startedData"],
-        endedData: json["endedData"],
+        startedDate: json["startedDate"],
+        endedDate: json["endedDate"],
     );
 
     Map<String, dynamic> toJson() => {
         "jobRole": jobRole,
         "companyName": companyName,
         "jobDescription": jobDescription,
-        "startedData": startedData,
-        "endedData": endedData,
+        "startedDate": startedDate,
+        "endedDate": endedDate,
     };
 }
 
