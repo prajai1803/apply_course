@@ -170,11 +170,13 @@ class ProfileController extends GetxController {
   void getUserData() async {
     user = await _storageProvider.readUserModel();
     isLoading.value = false;
-    print(user.experience!.listOfJobs!);
   }
 
   void getEditTotalWorkExperience() {
     totalWorkExperience = TextEditingController();
+    if (user.experience != null) {
+      totalWorkExperience.text =  user.experience!.totalWorkExperience.toString();
+    }
   }
 
   // Assign when we open add dialogue
@@ -282,7 +284,7 @@ class ProfileController extends GetxController {
     }
     var success = await _firebaseProvider.updateProfile(user.copyWith(
         experience: Experience(
-      listOfJobs: user.experience!.listOfJobs,
+      listOfJobs: user.experience == null ? null : user.experience!.listOfJobs,
       totalWorkExperience: total,
     )));
     getUserData();
@@ -307,7 +309,7 @@ class ProfileController extends GetxController {
     }
     var success = await _firebaseProvider.updateProfile(user.copyWith(
         education: Education(
-      listOfEducation: user.education!.listOfEducation,
+      listOfEducation: user.education == null ? null : user.education!.listOfEducation,
       totolYearOfEducation: total,
       totalBacklogs: totalback,
     )));

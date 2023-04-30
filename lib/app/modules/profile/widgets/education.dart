@@ -224,7 +224,8 @@ class EducationWidget extends StatelessWidget {
                     "Education",
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  IconButton(
+                  _controller.user.education != null
+                  ? IconButton(
                       onPressed: () {
                         _controller.getEditEducation();
                         _addEducation(context);
@@ -234,6 +235,7 @@ class EducationWidget extends StatelessWidget {
                         size: 25.r,
                         color: Colors.blue,
                       ))
+                      : Container(),
                 ],
               ),
               Divider(
@@ -398,7 +400,7 @@ class EducationWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32, top: 8.h),
                               child: Text(
-                                _controller.user.education!.totolYearOfEducation.toString(),
+                                _controller.user.education == null? "0" : _controller.user.education!.totolYearOfEducation.toString(),
                                   style: Theme.of(context).textTheme.bodySmall),
                             )
                           ],
@@ -434,7 +436,7 @@ class EducationWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32, top: 8.h),
                               child: Text(
-                                _controller.user.education!.totalBacklogs.toString(),
+                                _controller.user.education == null ? "0": _controller.user.education!.totalBacklogs.toString(),
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             )

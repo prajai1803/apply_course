@@ -107,7 +107,8 @@ class TestScoreWidget extends StatelessWidget {
                     "Test Scores",
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  IconButton(
+                  _controller.user.testScore != null
+                   ? IconButton(
                       onPressed: () {
                         _controller.getEditTestScore();
                         _addData(context);
@@ -117,6 +118,7 @@ class TestScoreWidget extends StatelessWidget {
                         size: 25.r,
                         color: Colors.blue,
                       ))
+                      : Container(),
                 ],
               ),
               Divider(

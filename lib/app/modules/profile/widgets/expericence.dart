@@ -175,7 +175,8 @@ class ExperienceWidget extends StatelessWidget {
                     "Experience",
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  IconButton(
+                  _controller.user.experience != null 
+                  ? IconButton(
                       onPressed: () {
                         _controller.getExperienceData();
                         _addData(context);
@@ -185,6 +186,7 @@ class ExperienceWidget extends StatelessWidget {
                         size: 25.r,
                         color: Colors.blue,
                       ))
+                      : Container(),
                 ],
               ),
               Divider(
@@ -346,7 +348,7 @@ class ExperienceWidget extends StatelessWidget {
                       left: 32,
                     ),
                     child: Text(
-                      "${_controller.user.experience!.totalWorkExperience ?? 0} Years",
+                      "${_controller.user.experience == null? 0: _controller.user.experience!.totalWorkExperience} Years",
                       style: Theme.of(context).textTheme.bodySmall!,
                     ),
                   ),
