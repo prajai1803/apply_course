@@ -236,7 +236,7 @@ class ListOfEducation {
     String? countryOfEducation;
     String? courseName;
     String? gradingSystem;
-    int? achievedMarks;
+    String? achievedMarks;
     String? startedDate;
     String? endedDate;
 
@@ -248,7 +248,7 @@ class ListOfEducation {
         String? countryOfEducation,
         String? courseName,
         String? gradingSystem,
-        int? achievedMarks,
+        String? achievedMarks,
         String? startedDate,
         String? endedDate,
     }) => 

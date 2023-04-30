@@ -141,12 +141,12 @@ class TestScoreWidget extends StatelessWidget {
                             width: 95.w,
                             padding: const EdgeInsets.only(right: 16),
                             child: Text(
-                              _controller.user.testScore!.listOfTest![0].testName ?? "",
+                              _controller.user.testScore!.listOfTest![index].testName ?? "",
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ),
                           Text(
-                            _controller.user.testScore!.listOfTest![index].testScore!,
+                            _controller.user.testScore!.listOfTest![index].testScore ?? "",
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ],
@@ -154,7 +154,7 @@ class TestScoreWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            _controller.user.testScore!.listOfTest![index].date!,
+                            _controller.user.testScore!.listOfTest![index].date ?? "",
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                           IconButton(

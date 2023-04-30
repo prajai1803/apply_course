@@ -61,6 +61,10 @@ class ProfileController extends GetxController {
   // Total work experience
   late TextEditingController totalWorkExperience;
 
+    // Total Education
+  late TextEditingController totolYearOfEducation;
+  late TextEditingController totalBacklogs;
+
   // Additional Information
   late TextEditingController additionalCantactName;
   late TextEditingController additionalCantactNumber;
@@ -91,11 +95,12 @@ class ProfileController extends GetxController {
   late TextEditingController university;
   late TextEditingController cityOfEducation;
   late TextEditingController stateOfEducation;
-  late TextEditingController countyOfEducation;
-  late TextEditingController gradingSystem;
+  late TextEditingController countryOfEducation;
   late TextEditingController achievedMarks;
   late TextEditingController educationStartedData;
   late TextEditingController educationEndedDate;
+  RxString educationStartedDateObs = ''.obs;
+  RxString educationEndedDateObs = ''.obs;
 
   @override
   void onInit() {
@@ -154,11 +159,12 @@ class ProfileController extends GetxController {
     university = TextEditingController();
     cityOfEducation = TextEditingController();
     stateOfEducation = TextEditingController();
-    countyOfEducation = TextEditingController();
-    gradingSystem = TextEditingController();
+    countryOfEducation = TextEditingController();
     achievedMarks = TextEditingController();
     educationStartedData = TextEditingController();
     educationEndedDate = TextEditingController();
+    totolYearOfEducation = TextEditingController();
+    totalBacklogs = TextEditingController();
   }
 
   void getUserData() async {
@@ -204,7 +210,7 @@ class ProfileController extends GetxController {
     budget = TextEditingController();
     inTake = TextEditingController();
 
-    print(user.studyPrefrences!.budget.toString());
+    // print(user.studyPrefrences!.budget.toString());
     if (user.studyPrefrences != null) {
       courseLevel.text = user.studyPrefrences!.courseLevel ?? "";
       countryPrefrence.text = user.studyPrefrences?.countryPrefrences ?? "";
@@ -244,6 +250,7 @@ class ProfileController extends GetxController {
     lorEmail = TextEditingController();
     recommededBy = TextEditingController();
     lorJobRole = TextEditingController();
+    lorRelationship = TextEditingController();
     lorCompanyName = TextEditingController();
     postalAddress = TextEditingController();
 
@@ -284,6 +291,32 @@ class ProfileController extends GetxController {
       Get.snackbar("Successfull", "Updated the profile");
     } else {
       isLoadingExperience.value = false;
+    }
+  }
+
+  void updateTotalEducation() async {
+    Get.back();
+    isLoadingEducation.value = true;
+    int total = 0;
+    int totalback = 0;
+    if (totolYearOfEducation.text.isNotEmpty) {
+      total = int.tryParse(totolYearOfEducation.text) ?? 0;
+    }
+    if (totalBacklogs.text.isNotEmpty) {
+      totalback = int.tryParse(totalBacklogs.text) ?? 0;
+    }
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        education: Education(
+      listOfEducation: user.education!.listOfEducation,
+      totolYearOfEducation: total,
+      totalBacklogs: totalback,
+    )));
+    getUserData();
+    if (success) {
+      isLoadingEducation.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingEducation.value = false;
     }
   }
 
@@ -416,6 +449,66 @@ class ProfileController extends GetxController {
       Get.snackbar("Successfull", "Updated the profile");
     } else {
       isLoadingExperience.value = false;
+    }
+  }
+
+  // Education CRUD
+  void updateEducation() async {
+    Get.back();
+    isLoadingEducation.value = true;
+    var total = 0;
+    if (user.education != null) {
+      total = user.education!.totolYearOfEducation ?? 0;
+    }
+    List<ListOfEducation> tempList = [];
+    if (user.education != null) {
+      tempList = user.education!.listOfEducation ?? [];
+    }
+    tempList.add(ListOfEducation(
+      courseName: courseName.text.isEmpty ? null : courseName.text,
+      achievedMarks: achievedMarks.text.isEmpty ? null : achievedMarks.text,
+      university: university.text.isEmpty ? null : university.text,
+      cityOfEducation: cityOfEducation.text.isEmpty ? null : cityOfEducation.text,
+      stateOfEducation: stateOfEducation.text.isEmpty ? null : stateOfEducation.text,
+      level: educationLevel.text.isEmpty
+          ? null
+          : educationLevel.text,
+      startedDate: educationStartedData.text.isEmpty
+          ? null
+          : educationStartedData.text,
+      endedDate:
+          educationEndedDate.text.isEmpty ? null : educationEndedDate.text,
+      countryOfEducation: countryOfEducation.text.isEmpty
+          ? null
+          : countryOfEducation.text,
+    ));
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        education:
+            Education(listOfEducation: tempList, totolYearOfEducation: total,totalBacklogs: 0)));
+    getUserData();
+    if (success) {
+      isLoadingEducation.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingEducation.value = false;
+    }
+  }
+
+  void deleteEducation(index) async {
+    isLoadingEducation.value = true;
+    List<ListOfEducation> tempList = [];
+    if (user.experience != null) {
+      tempList = user.education!.listOfEducation ?? [];
+    }
+    tempList.removeAt(index);
+    var success = await _firebaseProvider.updateProfile(
+        user.copyWith(education: Education(listOfEducation: tempList)));
+    getUserData();
+    if (success) {
+      isLoadingEducation.value = false;
+      Get.snackbar("Successfull", "Updated the profile");
+    } else {
+      isLoadingEducation.value = false;
     }
   }
 
