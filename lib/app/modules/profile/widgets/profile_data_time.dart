@@ -6,7 +6,8 @@ class ProfileDatePicker extends StatelessWidget {
   String? hintText;
   Function()? onTap;
   TextEditingController? controller;
-  ProfileDatePicker({super.key,this.date = "",this.onTap,this.hintText,this.controller});
+  String? Function(String? value)? validator;
+  ProfileDatePicker({super.key,this.date = "",this.onTap,this.hintText,this.controller,this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class ProfileDatePicker extends StatelessWidget {
         controller: controller,
         textAlignVertical: TextAlignVertical.center,
         style: Theme.of(context).textTheme.bodySmall,
-        
+        validator: validator,
         readOnly: true,
         onTap: onTap,
         decoration: InputDecoration(

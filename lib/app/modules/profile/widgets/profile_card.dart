@@ -236,7 +236,7 @@ class ProfileCard extends StatelessWidget {
                               padding: EdgeInsets.symmetric(horizontal: 10.w),
                               child: Text(
                                 _controller.user.profileStatus == null
-                                    ? "0%"
+                                    ? "${_controller.profileStatus.value}%"
                                     : _controller.user.profileStatus!
                                         .toString(),
                                 style: Theme.of(context).textTheme.bodyMedium,
@@ -248,7 +248,7 @@ class ProfileCard extends StatelessWidget {
                           padding: EdgeInsets.symmetric(vertical: 4.h),
                           child: StepProgressIndicator(
                             totalSteps: 100,
-                            currentStep: 33,
+                            currentStep: _controller.profileStatus.value,
                             size: 5,
                             padding: 0,
                             selectedGradientColor: LinearGradient(

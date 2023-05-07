@@ -1,8 +1,10 @@
 import 'package:apply_course/app/modules/home/home_page_view.dart';
+import 'package:apply_course/app/modules/premium/premium_view.dart';
 import 'package:apply_course/app/modules/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'appbase_controller.dart';
 
@@ -17,7 +19,7 @@ class AppBase extends StatelessWidget {
     List screens = [
       HomeScreen(),
       HomeScreen(),
-      HomeScreen(),
+      PremiumConsellingScreen(),
       HomeScreen(),
       ProfileScreen(),
       // LoginScreen(),
@@ -32,6 +34,7 @@ class AppBase extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           unselectedItemColor: Colors.black,
           selectedItemColor: Colors.blue,
+          
           items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
@@ -39,11 +42,11 @@ class AppBase extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.star_border_outlined),
-              label: 'Activity',
+              label: 'Explore',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outline),
-              label: 'Chat',
+              icon: Icon(FontAwesomeIcons.crown,color: Colors.blue[800],),
+              label: 'Preminum',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bookmark_outline),

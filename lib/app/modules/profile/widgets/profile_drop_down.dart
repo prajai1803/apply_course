@@ -5,7 +5,8 @@ class ProfileDropDown extends StatelessWidget {
   String? hintText;
   List data = [];
   Function(dynamic value)? onChanged;
-  ProfileDropDown({super.key, required this.data, this.hintText = "",required this.onChanged});
+  String? Function(String? value)? validator;
+  ProfileDropDown({super.key, required this.data, this.hintText = "",required this.onChanged, this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class ProfileDropDown extends StatelessWidget {
           alignedDropdown: true,
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: DropdownButtonFormField(
+            validator: validator,
             style: Theme.of(context).textTheme.bodySmall,
               decoration: InputDecoration(
                 filled: true,

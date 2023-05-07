@@ -20,81 +20,111 @@ class AdditionalInformationWidget extends StatelessWidget {
         child: SizedBox(
           height: 300.h,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Contact Name",
-                    onChanged: (value) {},
-                    textEditingController: _controller.additionalCantactName,
+            child: Form(
+              key: _controller.profileEditFormKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Contact Name",
+                      onChanged: (value) {},
+                      textEditingController: _controller.additionalCantactName,
+                      validator: (value) {
+                            if (value == null || value == "") {
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Contact Number",
-                    textEditingController: _controller.additionalCantactNumber,
-                    onChanged: (value) {},
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Contact Number",
+                      textEditingController: _controller.additionalCantactNumber,
+                      validator: (value) {
+                            if (value == null || value == "") {
+                              return 'filed is neccessary';
+                            }
+                          },
+                      onChanged: (value) {},
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Email",
-                    textEditingController: _controller.additionalEmail,
-                    onChanged: (value) {},
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Email",
+                      textEditingController: _controller.additionalEmail,
+                      validator: (value) {
+                            if (value == null || value == "") {
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Relationship with applicatnt",
-                    textEditingController: _controller.additionalRelastionship,
-                    onChanged: (value) {},
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Relationship with applicatnt",
+                      textEditingController: _controller.additionalRelastionship,
+                      validator: (value) {
+                            if (value == null || value == "") {
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Mailing Address",
-                    textEditingController: _controller.additionalMailingAddress,
-                    onChanged: (value) {},
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Mailing Address",
+                      textEditingController: _controller.additionalMailingAddress,
+                      validator: (value) {
+                            if (value == null || value == "") {
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Permanent Address",
-                    textEditingController: _controller.additionalPermanentAddress,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Permanent Address",
+                      textEditingController: _controller.additionalPermanentAddress,
+                      validator: (value) {
+                            if (value == null || value == "") {
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.updateAdditionalInformation();
-                        },
-                        child: Text(
-                          "Save",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.updateAdditionalInformation();
+                          },
+                          child: Text(
+                            "Save",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.white),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

@@ -23,68 +23,88 @@ class TestScoreWidget extends StatelessWidget {
         child: SizedBox(
           height: 250.h,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
-                    hintText: "Test",
-                    data: ["GMAT", "GRE", "PTE"],
-                    onChanged: (value) {
-                      _controller.testType.text = value;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Score",
-                    isNumPad: true,
-                    textEditingController: _controller.score,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDatePicker(
-                    hintText: "Exam Date",
-                    controller: _controller.examDate,
-                    onTap: () async {
-                      DateTime? piackedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2050));
-                          _controller.examDateObs.value = DateFormat('dd-MM-yyyy').format(piackedDate!);
-                      _controller.examDate.text =  DateFormat('dd-MM-yyyy').format(piackedDate);
-                    },
-                    date: _controller.examDateObs.value,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
+            child: Form(
+              key: _controller.profileEditFormKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileDropDown(
+                      hintText: "Test",
+                      data: ["GMAT", "GRE", "PTE"],
+                      onChanged: (value) {
+                        _controller.testType.text = value;
+                        _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      validator: (value) {
+                          if (value == null || value == "") {
+                            return 'filed is neccessary';
+                          }
                         },
-                        child: Text(
-                          "Cancel",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.addTestScore();
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Score",
+                      isNumPad: true,
+                      textEditingController: _controller.score,
+                      validator: (value) {
+                          if (value == null || value == "") {
+                            return 'filed is neccessary';
+                          }
                         },
-                        child: Text(
-                          "Save",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileDatePicker(
+                      hintText: "Exam Date",
+                      controller: _controller.examDate,
+                      onTap: () async {
+                        DateTime? piackedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2050));
+                            _controller.examDateObs.value = DateFormat('dd-MM-yyyy').format(piackedDate!);
+                        _controller.examDate.text =  DateFormat('dd-MM-yyyy').format(piackedDate);
+                        _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      date: _controller.examDateObs.value,
+                      validator: (value) {
+                          if (value == null || value == "") {
+                            return 'filed is neccessary';
+                          }
+                        },
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.addTestScore();
+                          },
+                          child: Text(
+                            "Save",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.white),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

@@ -70,89 +70,119 @@ class ExperienceWidget extends StatelessWidget {
         child: SizedBox(
           height: 250.h,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Jobs Role",
-                    textEditingController: _controller.experiencejobRole,
+            child: Form(
+              key: _controller.profileEditFormKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Jobs Role",
+                      textEditingController: _controller.experiencejobRole,
+                      validator: (value) {
+                            if (value == null || value == ""){
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Company Name",
-                    textEditingController: _controller.experienceCompanyName,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Company Name",
+                      textEditingController: _controller.experienceCompanyName,
+                      validator: (value) {
+                            if (value == null || value == ""){
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDatePicker(
-                    hintText: "Start Date",
-                    controller: _controller.experienceStartedDate,
-                    onTap: () async {
-                      DateTime? piackedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2050));
-                          _controller.experienceStartedDateObs.value = DateFormat('dd-MM-yy').format(piackedDate!);
-                      _controller.experienceStartedDate.text =  DateFormat('dd-MM-yy').format(piackedDate);
-                      
-                    },
-                    date: _controller.experienceStartedDateObs.value,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileDatePicker(
+                      hintText: "Start Date",
+                      controller: _controller.experienceStartedDate,
+                      onTap: () async {
+                        DateTime? piackedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2050));
+                            _controller.experienceStartedDateObs.value = DateFormat('dd-MM-yy').format(piackedDate!);
+                        _controller.experienceStartedDate.text =  DateFormat('dd-MM-yy').format(piackedDate);
+                        _controller.profileEditFormKey.currentState!.validate();
+                        
+                      },
+                      validator: (value) {
+                            if (value == null || value == ""){
+                              return 'filed is neccessary';
+                            }
+                          },
+                      date: _controller.experienceStartedDateObs.value,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDatePicker(
-                    hintText: "End Date",
-                    controller: _controller.experienceEndedDate,
-                    onTap: () async {
-                      DateTime? piackedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2050));
-                        _controller.experienceEndedDateObs.value = DateFormat('dd-MM-yyyy').format(piackedDate!);
-                      _controller.experienceEndedDate.text =  DateFormat('dd-MM-yyyy').format(piackedDate);
-                    },
-                    date: _controller.experienceEndedDateObs.value,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileDatePicker(
+                      hintText: "End Date",
+                      controller: _controller.experienceEndedDate,
+                      onTap: () async {
+                        DateTime? piackedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2050));
+                          _controller.experienceEndedDateObs.value = DateFormat('dd-MM-yyyy').format(piackedDate!);
+                        _controller.experienceEndedDate.text =  DateFormat('dd-MM-yyyy').format(piackedDate);
+                        _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      validator: (value) {
+                            if (value == null || value == ""){
+                              return 'filed is neccessary';
+                            }
+                          },
+                      date: _controller.experienceEndedDateObs.value,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Description",
-                    textEditingController: _controller.experiencejobDescription,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Description",
+                      textEditingController: _controller.experiencejobDescription,
+                      validator: (value) {
+                            if (value == null || value == ""){
+                              return 'filed is neccessary';
+                            }
+                          },
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.updateExperience();
-                        },
-                        child: Text(
-                          "Save",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.updateExperience();
+                          },
+                          child: Text(
+                            "Save",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.white),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

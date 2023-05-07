@@ -22,53 +22,54 @@ class EducationWidget extends StatelessWidget {
         child: SizedBox(
           height: 170.h,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Total year of education",
-                    isNumPad: true,
-                    textEditingController: _controller.totolYearOfEducation,
-                    onChanged: (value) {
-                      
-                    },
+            child: Form(
+              key: _controller.profileEditFormKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Total year of education",
+                      isNumPad: true,
+                      textEditingController: _controller.totolYearOfEducation,
+                      onChanged: (value) {},
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Total Backlog",
-                    isNumPad: true,
-                    textEditingController: _controller.totalBacklogs,
-                    onChanged: (value) {},
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Total Backlog",
+                      isNumPad: true,
+                      textEditingController: _controller.totalBacklogs,
+                      onChanged: (value) {},
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                         _controller.updateTotalEducation();
-                        },
-                        child: Text(
-                          "Save",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.updateTotalEducation();
+                          },
+                          child: Text(
+                            "Save",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.white),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -84,124 +85,175 @@ class EducationWidget extends StatelessWidget {
         child: SizedBox(
           height: 250.h,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
-                    hintText: "Education Level",
-                    data: ["10th", "12th", "Bachelor", "Master"],
-                    onChanged: (value) {
-                      _controller.educationLevel.text = value;
-                    },
+            child: Form(
+              key: _controller.profileEditFormKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileDropDown(
+                      hintText: "Education Level",
+                      data: ["10th", "12th", "Bachelor", "Master"],
+                      onChanged: (value) {
+                        _controller.educationLevel.text = value;
+                        _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Course Name",
-                    textEditingController: _controller.courseName,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Course Name",
+                      textEditingController: _controller.courseName,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "University Name",
-                    textEditingController: _controller.university,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "University Name",
+                      textEditingController: _controller.university,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "City Of Education",
-                    textEditingController: _controller.cityOfEducation,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "City Of Education",
+                      textEditingController: _controller.cityOfEducation,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "State of Education",
-                    textEditingController: _controller.stateOfEducation,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "State of Education",
+                      textEditingController: _controller.stateOfEducation,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Country of Education",
-                    textEditingController: _controller.countryOfEducation,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Country of Education",
+                      textEditingController: _controller.countryOfEducation,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Percentage",
-                    isNumPad: true,
-                    textEditingController: _controller.achievedMarks,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Percentage",
+                      isNumPad: true,
+                      textEditingController: _controller.achievedMarks,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDatePicker(
-                    hintText: "Start Date",
-                    controller: _controller.educationStartedData,
-                    onTap: () async {
-                      DateTime? piackedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2050));
-                      _controller.educationStartedDateObs.value =
-                          DateFormat('dd-MM-yy').format(piackedDate!);
-                      _controller.educationStartedData
-                        ..text = DateFormat('dd-MM-yy').format(piackedDate);
-                    },
-                    date: _controller.educationStartedDateObs.value,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileDatePicker(
+                      hintText: "Start Date",
+                      controller: _controller.educationStartedData,
+                      onTap: () async {
+                        DateTime? piackedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2050));
+                        _controller.educationStartedDateObs.value =
+                            DateFormat('yyyy').format(piackedDate!);
+                        _controller.educationStartedData
+                          ..text = DateFormat('yyyy').format(piackedDate);
+                          _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      date: _controller.educationStartedDateObs.value,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDatePicker(
-                    hintText: "End Date",
-                    controller: _controller.educationEndedDate,
-                    onTap: () async {
-                      DateTime? piackedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2050));
-                      _controller.educationEndedDateObs.value =
-                          DateFormat('dd-MM-yy').format(piackedDate!);
-                      _controller.educationEndedDate.text =
-                          DateFormat('dd-MM-yy').format(piackedDate);
-                    },
-                    date: _controller.educationEndedDateObs.value,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileDatePicker(
+                      hintText: "End Date",
+                      controller: _controller.educationEndedDate,
+                      onTap: () async {
+                        DateTime? piackedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2050));
+                        _controller.educationEndedDateObs.value =
+                            DateFormat('yyyy').format(piackedDate!);
+                        _controller.educationEndedDate.text =
+                            DateFormat('yyyy').format(piackedDate);
+                            _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      date: _controller.educationEndedDateObs.value,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return 'filed is neccessary';
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.updateEducation();
-                        },
-                        child: Text(
-                          "Save",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.updateEducation();
+                          },
+                          child: Text(
+                            "Save",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.white),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -225,16 +277,16 @@ class EducationWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   _controller.user.education != null
-                  ? IconButton(
-                      onPressed: () {
-                        _controller.getEditEducation();
-                        _addEducation(context);
-                      },
-                      icon: Icon(
-                        Icons.add,
-                        size: 25.r,
-                        color: Colors.blue,
-                      ))
+                      ? IconButton(
+                          onPressed: () {
+                            _controller.getEditEducation();
+                            _addEducation(context);
+                          },
+                          icon: Icon(
+                            Icons.add,
+                            size: 25.r,
+                            color: Colors.blue,
+                          ))
                       : Container(),
                 ],
               ),
@@ -289,8 +341,8 @@ class EducationWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32, bottom: 2.h),
                               child: Text(
-                                    _controller.user.education!.listOfEducation![index]
-                                        .courseName ??
+                                _controller.user.education!
+                                        .listOfEducation![index].courseName ??
                                     "No Data",
                                 style: Theme.of(context)
                                     .textTheme
@@ -303,8 +355,8 @@ class EducationWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32, bottom: 2.h),
                               child: Text(
-                                _controller.user.education!.listOfEducation![index]
-                                        .university ??
+                                _controller.user.education!
+                                        .listOfEducation![index].university ??
                                     "No Data",
                                 style: Theme.of(context)
                                     .textTheme
@@ -322,7 +374,7 @@ class EducationWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32),
                               child: Text(
-                                    "${_controller.user.education!.listOfEducation![index].startedDate ?? "No Data"} - ${_controller.user.education!.listOfEducation![index].endedDate ?? "No Data"}",
+                                "${_controller.user.education!.listOfEducation![index].startedDate ?? "No Data"} - ${_controller.user.education!.listOfEducation![index].endedDate ?? "No Data"}",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ),
@@ -346,7 +398,7 @@ class EducationWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10)),
                           child: TextButton(
                             onPressed: () {
-                              _controller.getExperienceData();
+                              _controller.getEditEducation();
                               _addEducation(context);
                             },
                             child: Text(
@@ -400,7 +452,11 @@ class EducationWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32, top: 8.h),
                               child: Text(
-                                _controller.user.education == null? "0" : _controller.user.education!.totolYearOfEducation.toString(),
+                                  _controller.user.education == null
+                                      ? "0"
+                                      : _controller
+                                          .user.education!.totolYearOfEducation
+                                          .toString(),
                                   style: Theme.of(context).textTheme.bodySmall),
                             )
                           ],
@@ -436,7 +492,10 @@ class EducationWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(left: 32, top: 8.h),
                               child: Text(
-                                _controller.user.education == null ? "0": _controller.user.education!.totalBacklogs.toString(),
+                                _controller.user.education == null
+                                    ? "0"
+                                    : _controller.user.education!.totalBacklogs
+                                        .toString(),
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             )
@@ -447,7 +506,6 @@ class EducationWidget extends StatelessWidget {
                           onPressed: () {
                             _controller.getEditEducation();
                             _addEducationYear(context);
-                            
                           },
                           icon: Icon(
                             Icons.edit_outlined,

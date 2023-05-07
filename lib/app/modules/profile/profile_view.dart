@@ -23,30 +23,40 @@ class ProfileScreen extends GetView<ProfileController> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 245, 255),
       body: SafeArea(
-        child:  Container(
-          padding: EdgeInsets.symmetric(horizontal: 14.w,vertical: 14.h),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
           child: SingleChildScrollView(
-            child: !_controller.isLoading.value ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4.h),
-                  child: Text("20 Action Pending",style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.red[800]),),
-                ),
-                ProfileCard(),
-                YourStudyPrefrences(),
-                ExperienceWidget(),
-                EducationWidget(),
-                TestScoreWidget(),
-                AdditionalInformationWidget(),
-                LORDeailsWidget(),
-              ],
-            ) :  SizedBox(
-              height: _height,
-              child:const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
+            child: !_controller.isLoading.value
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4.h),
+                        child: Obx(() => _controller.actionPending != 0
+                            ? Text(
+                                "${_controller.actionPending} Action Pending",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(color: Colors.red[800]),
+                              )
+                            : Container()),
+                      ),
+                      ProfileCard(),
+                      YourStudyPrefrences(),
+                      ExperienceWidget(),
+                      EducationWidget(),
+                      TestScoreWidget(),
+                      AdditionalInformationWidget(),
+                      LORDeailsWidget(),
+                    ],
+                  )
+                : SizedBox(
+                    height: _height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
           ),
         ),
       ),

@@ -5,12 +5,16 @@ import 'package:apply_course/app/data/providers/storage_provider.dart';
 import 'package:apply_course/app/modules/profile/widgets/test_score.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends GetxController {
   final StorageProvider _storageProvider = StorageProvider();
   final FirebaseProvider _firebaseProvider = FirebaseProvider();
   late UserModel user;
+
+  // Form key for profile edit
+  final profileEditFormKey = GlobalKey<FormState>();
 
   // Add Picture Controller
   var selectedImagePath = ''.obs;
@@ -26,7 +30,9 @@ class ProfileController extends GetxController {
   RxBool isLoadingTestScore = false.obs;
   RxBool isLoadingEducation = false.obs;
 
-  int profileStatus = 0;
+  RxInt profileStatus = 0.obs;
+
+  RxInt actionPending = 7.obs;
 
   // For pickingImage
   XFile? pickedFile;
@@ -61,7 +67,7 @@ class ProfileController extends GetxController {
   // Total work experience
   late TextEditingController totalWorkExperience;
 
-    // Total Education
+  // Total Education
   late TextEditingController totolYearOfEducation;
   late TextEditingController totalBacklogs;
 
@@ -114,6 +120,37 @@ class ProfileController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+  }
+
+  void _calculatePending() {
+    int point = 7;
+    int profileStatusPoint = 0;
+    if (user.studyPrefrences != null) {
+      point -= 1;
+      profileStatusPoint += 14;
+    }
+    if (user.experience != null) {
+      point -= 1;
+      profileStatusPoint += 14;
+    }
+    if (user.education != null) {
+      point -= 1;
+      profileStatusPoint += 14;
+    }
+    if (user.testScore != null) {
+      point -= 1;
+      profileStatusPoint += 14;
+    }
+    if (user.additionalInformation != null) {
+      point -= 1;
+      profileStatusPoint += 14;
+    }
+    if (user.studyPrefrences != null) {
+      point -= 1;
+      profileStatusPoint += 16;
+    }
+    actionPending.value = point;
+    profileStatus.value = profileStatusPoint;
   }
 
   void uploadImage() async {
@@ -170,12 +207,14 @@ class ProfileController extends GetxController {
   void getUserData() async {
     user = await _storageProvider.readUserModel();
     isLoading.value = false;
+    _calculatePending();
   }
 
   void getEditTotalWorkExperience() {
     totalWorkExperience = TextEditingController();
     if (user.experience != null) {
-      totalWorkExperience.text =  user.experience!.totalWorkExperience.toString();
+      totalWorkExperience.text =
+          user.experience!.totalWorkExperience.toString();
     }
   }
 
@@ -309,7 +348,8 @@ class ProfileController extends GetxController {
     }
     var success = await _firebaseProvider.updateProfile(user.copyWith(
         education: Education(
-      listOfEducation: user.education == null ? null : user.education!.listOfEducation,
+      listOfEducation:
+          user.education == null ? null : user.education!.listOfEducation,
       totolYearOfEducation: total,
       totalBacklogs: totalback,
     )));
@@ -346,93 +386,99 @@ class ProfileController extends GetxController {
   }
 
   void updateStudyPrefrences() async {
-    Get.back();
-    isLoadingStudyPrefrences.value = true;
-    int? tempBudget = int.tryParse(budget.text);
-    var success = await _firebaseProvider.updateProfile(user.copyWith(
-      studyPrefrences: StudyPrefrences(
-        courseLevel: courseLevel.text.isEmpty ? null : courseLevel.text,
-        countryPrefrences:
-            countryPrefrence.text.isEmpty ? null : countryPrefrence.text,
-        preferredCourse:
-            preferredCourse.text.isEmpty ? null : preferredCourse.text,
-        specialization:
-            specialization.text.isEmpty ? null : specialization.text,
-        budget: budget.text.isEmpty ? null : tempBudget,
-        inTake: inTake.text.isEmpty ? null : inTake.text,
-      ),
-    ));
-    getUserData();
-    if (success) {
-      isLoadingStudyPrefrences.value = false;
-      Get.snackbar("Successfull", "Updated the profile");
-    } else {
-      isLoadingStudyPrefrences.value = false;
+    if (profileEditFormKey.currentState!.validate()) {
+      Get.back();
+      isLoadingStudyPrefrences.value = true;
+      int? tempBudget = int.tryParse(budget.text);
+      var success = await _firebaseProvider.updateProfile(user.copyWith(
+        studyPrefrences: StudyPrefrences(
+          courseLevel: courseLevel.text.isEmpty ? null : courseLevel.text,
+          countryPrefrences:
+              countryPrefrence.text.isEmpty ? null : countryPrefrence.text,
+          preferredCourse:
+              preferredCourse.text.isEmpty ? null : preferredCourse.text,
+          specialization:
+              specialization.text.isEmpty ? null : specialization.text,
+          budget: budget.text.isEmpty ? null : tempBudget,
+          inTake: inTake.text.isEmpty ? null : inTake.text,
+        ),
+      ));
+      getUserData();
+      if (success) {
+        isLoadingStudyPrefrences.value = false;
+        Get.snackbar("Successfull", "Updated the profile");
+      } else {
+        isLoadingStudyPrefrences.value = false;
+      }
     }
   }
 
   void updateLORDetails() async {
-    Get.back();
-    isLoadingLORDetails.value = true;
-    var success = await _firebaseProvider.updateProfile(
-      user.copyWith(
-        lorDetails: LorDetails(
-          companyName: lorCompanyName.text,
-          name: lorContactName.text,
-          contactNumber: lorContactNumber.text,
-          email: lorEmail.text,
-          jobRole: lorJobRole.text,
-          designation: lorJobRole.text,
-          postalAddress: postalAddress.text,
-          recommededBy: recommededBy.text,
-          relationToStudent: lorRelationship.text,
+    if (profileEditFormKey.currentState!.validate()) {
+      Get.back();
+      isLoadingLORDetails.value = true;
+      var success = await _firebaseProvider.updateProfile(
+        user.copyWith(
+          lorDetails: LorDetails(
+            companyName: lorCompanyName.text,
+            name: lorContactName.text,
+            contactNumber: lorContactNumber.text,
+            email: lorEmail.text,
+            jobRole: lorJobRole.text,
+            designation: lorJobRole.text,
+            postalAddress: postalAddress.text,
+            recommededBy: recommededBy.text,
+            relationToStudent: lorRelationship.text,
+          ),
         ),
-      ),
-    );
-    getUserData();
-    if (success) {
-      isLoadingLORDetails.value = false;
-      Get.snackbar("Successfull", "Updated the profile");
-    } else {
-      isLoadingLORDetails.value = false;
+      );
+      getUserData();
+      if (success) {
+        isLoadingLORDetails.value = false;
+        Get.snackbar("Successfull", "Updated the profile");
+      } else {
+        isLoadingLORDetails.value = false;
+      }
     }
   }
 
   // Experience CRUD
   void updateExperience() async {
-    Get.back();
-    isLoadingExperience.value = true;
-    var total = 0;
-    if (user.experience != null) {
-      total = user.experience!.totalWorkExperience ?? 0;
-    }
-    List<Job> tempList = [];
-    if (user.experience != null) {
-      tempList = user.experience!.listOfJobs ?? [];
-    }
-    tempList.add(Job(
-      jobRole: experiencejobRole.text.isEmpty ? null : experiencejobRole.text,
-      companyName: experienceCompanyName.text.isEmpty
-          ? null
-          : experienceCompanyName.text,
-      startedDate: experienceStartedDate.text.isEmpty
-          ? null
-          : experienceStartedDate.text,
-      endedDate:
-          experienceEndedDate.text.isEmpty ? null : experienceEndedDate.text,
-      jobDescription: experiencejobDescription.text.isEmpty
-          ? null
-          : experiencejobDescription.text,
-    ));
-    var success = await _firebaseProvider.updateProfile(user.copyWith(
-        experience:
-            Experience(listOfJobs: tempList, totalWorkExperience: total)));
-    getUserData();
-    if (success) {
-      isLoadingExperience.value = false;
-      Get.snackbar("Successfull", "Updated the profile");
-    } else {
-      isLoadingExperience.value = false;
+    if (profileEditFormKey.currentState!.validate()) {
+      Get.back();
+      isLoadingExperience.value = true;
+      var total = 0;
+      if (user.experience != null) {
+        total = user.experience!.totalWorkExperience ?? 0;
+      }
+      List<Job> tempList = [];
+      if (user.experience != null) {
+        tempList = user.experience!.listOfJobs ?? [];
+      }
+      tempList.add(Job(
+        jobRole: experiencejobRole.text.isEmpty ? null : experiencejobRole.text,
+        companyName: experienceCompanyName.text.isEmpty
+            ? null
+            : experienceCompanyName.text,
+        startedDate: experienceStartedDate.text.isEmpty
+            ? null
+            : experienceStartedDate.text,
+        endedDate:
+            experienceEndedDate.text.isEmpty ? null : experienceEndedDate.text,
+        jobDescription: experiencejobDescription.text.isEmpty
+            ? null
+            : experiencejobDescription.text,
+      ));
+      var success = await _firebaseProvider.updateProfile(user.copyWith(
+          experience:
+              Experience(listOfJobs: tempList, totalWorkExperience: total)));
+      getUserData();
+      if (success) {
+        isLoadingExperience.value = false;
+        Get.snackbar("Successfull", "Updated the profile");
+      } else {
+        isLoadingExperience.value = false;
+      }
     }
   }
 
@@ -443,8 +489,10 @@ class ProfileController extends GetxController {
       tempList = user.experience!.listOfJobs ?? [];
     }
     tempList.removeAt(index);
-    var success = await _firebaseProvider.updateProfile(
-        user.copyWith(experience: Experience(listOfJobs: tempList)));
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        experience: Experience(
+            listOfJobs: tempList,
+            totalWorkExperience: user.experience!.totalWorkExperience ?? 0)));
     getUserData();
     if (success) {
       isLoadingExperience.value = false;
@@ -456,43 +504,46 @@ class ProfileController extends GetxController {
 
   // Education CRUD
   void updateEducation() async {
-    Get.back();
-    isLoadingEducation.value = true;
-    var total = 0;
-    if (user.education != null) {
-      total = user.education!.totolYearOfEducation ?? 0;
-    }
-    List<ListOfEducation> tempList = [];
-    if (user.education != null) {
-      tempList = user.education!.listOfEducation ?? [];
-    }
-    tempList.add(ListOfEducation(
-      courseName: courseName.text.isEmpty ? null : courseName.text,
-      achievedMarks: achievedMarks.text.isEmpty ? null : achievedMarks.text,
-      university: university.text.isEmpty ? null : university.text,
-      cityOfEducation: cityOfEducation.text.isEmpty ? null : cityOfEducation.text,
-      stateOfEducation: stateOfEducation.text.isEmpty ? null : stateOfEducation.text,
-      level: educationLevel.text.isEmpty
-          ? null
-          : educationLevel.text,
-      startedDate: educationStartedData.text.isEmpty
-          ? null
-          : educationStartedData.text,
-      endedDate:
-          educationEndedDate.text.isEmpty ? null : educationEndedDate.text,
-      countryOfEducation: countryOfEducation.text.isEmpty
-          ? null
-          : countryOfEducation.text,
-    ));
-    var success = await _firebaseProvider.updateProfile(user.copyWith(
-        education:
-            Education(listOfEducation: tempList, totolYearOfEducation: total,totalBacklogs: 0)));
-    getUserData();
-    if (success) {
-      isLoadingEducation.value = false;
-      Get.snackbar("Successfull", "Updated the profile");
-    } else {
-      isLoadingEducation.value = false;
+    if (profileEditFormKey.currentState!.validate()) {
+      Get.back();
+      isLoadingEducation.value = true;
+      var total = 0;
+      if (user.education != null) {
+        total = user.education!.totolYearOfEducation ?? 0;
+      }
+      List<ListOfEducation> tempList = [];
+      if (user.education != null) {
+        tempList = user.education!.listOfEducation ?? [];
+      }
+      tempList.add(ListOfEducation(
+        courseName: courseName.text.isEmpty ? null : courseName.text,
+        achievedMarks: achievedMarks.text.isEmpty ? null : achievedMarks.text,
+        university: university.text.isEmpty ? null : university.text,
+        cityOfEducation:
+            cityOfEducation.text.isEmpty ? null : cityOfEducation.text,
+        stateOfEducation:
+            stateOfEducation.text.isEmpty ? null : stateOfEducation.text,
+        level: educationLevel.text.isEmpty ? null : educationLevel.text,
+        startedDate: educationStartedData.text.isEmpty
+            ? null
+            : educationStartedData.text,
+        endedDate:
+            educationEndedDate.text.isEmpty ? null : educationEndedDate.text,
+        countryOfEducation:
+            countryOfEducation.text.isEmpty ? null : countryOfEducation.text,
+      ));
+      var success = await _firebaseProvider.updateProfile(user.copyWith(
+          education: Education(
+              listOfEducation: tempList,
+              totolYearOfEducation: total,
+              totalBacklogs: 0)));
+      getUserData();
+      if (success) {
+        isLoadingEducation.value = false;
+        Get.snackbar("Successfull", "Updated the profile");
+      } else {
+        isLoadingEducation.value = false;
+      }
     }
   }
 
@@ -503,8 +554,11 @@ class ProfileController extends GetxController {
       tempList = user.education!.listOfEducation ?? [];
     }
     tempList.removeAt(index);
-    var success = await _firebaseProvider.updateProfile(
-        user.copyWith(education: Education(listOfEducation: tempList)));
+    var success = await _firebaseProvider.updateProfile(user.copyWith(
+        education: Education(
+            listOfEducation: tempList,
+            totalBacklogs: user.education!.totalBacklogs ?? 0,
+            totolYearOfEducation: user.education!.totolYearOfEducation)));
     getUserData();
     if (success) {
       isLoadingEducation.value = false;
@@ -515,59 +569,63 @@ class ProfileController extends GetxController {
   }
 
   void updateAdditionalInformation() async {
-    Get.back();
-    isLoadingAdditionalInformation.value = true;
-    var success = await _firebaseProvider.updateProfile(user.copyWith(
-      additionalInformation: AdditionalInformation(
-        contactName: additionalCantactName.text.isEmpty
-            ? null
-            : additionalCantactName.text,
-        contactNumber: additionalCantactNumber.text.isEmpty
-            ? null
-            : additionalCantactNumber.text,
-        email: additionalEmail.text.isEmpty ? null : additionalEmail.text,
-        relationshipWithApplicant: additionalRelastionship.text.isEmpty
-            ? null
-            : additionalRelastionship.text,
-        mailingAdress: additionalMailingAddress.text.isEmpty
-            ? null
-            : additionalMailingAddress.text,
-        permanentAddress: additionalPermanentAddress.text.isEmpty
-            ? null
-            : additionalPermanentAddress.text,
-      ),
-    ));
-    getUserData();
-    if (success) {
-      isLoadingAdditionalInformation.value = false;
-      Get.snackbar("Successfull", "Updated the profile");
-    } else {
-      isLoadingAdditionalInformation.value = false;
+    if (profileEditFormKey.currentState!.validate()) {
+      Get.back();
+      isLoadingAdditionalInformation.value = true;
+      var success = await _firebaseProvider.updateProfile(user.copyWith(
+        additionalInformation: AdditionalInformation(
+          contactName: additionalCantactName.text.isEmpty
+              ? null
+              : additionalCantactName.text,
+          contactNumber: additionalCantactNumber.text.isEmpty
+              ? null
+              : additionalCantactNumber.text,
+          email: additionalEmail.text.isEmpty ? null : additionalEmail.text,
+          relationshipWithApplicant: additionalRelastionship.text.isEmpty
+              ? null
+              : additionalRelastionship.text,
+          mailingAdress: additionalMailingAddress.text.isEmpty
+              ? null
+              : additionalMailingAddress.text,
+          permanentAddress: additionalPermanentAddress.text.isEmpty
+              ? null
+              : additionalPermanentAddress.text,
+        ),
+      ));
+      getUserData();
+      if (success) {
+        isLoadingAdditionalInformation.value = false;
+        Get.snackbar("Successfull", "Updated the profile");
+      } else {
+        isLoadingAdditionalInformation.value = false;
+      }
     }
   }
 
   void addTestScore() async {
-    Get.back();
-    isLoadingTestScore.value = true;
-    List<Test> tempList = [];
-    if (user.testScore != null) {
-      tempList = user.testScore!.listOfTest ?? [];
-    }
-    tempList.add(Test(
-      date: examDate.text.isEmpty ? null : examDate.text,
-      testName: testType.text.isEmpty ? null : testType.text,
-      testScore: score.text.isEmpty ? null : score.text,
-    ));
-    var success = await _firebaseProvider.updateProfile(user.copyWith(
-        testScore: TestScore(
-      listOfTest: tempList,
-    )));
-    getUserData();
-    if (success) {
-      isLoadingTestScore.value = false;
-      Get.snackbar("Successfull", "Updated the profile");
-    } else {
-      isLoadingTestScore.value = false;
+    if (profileEditFormKey.currentState!.validate()) {
+      Get.back();
+      isLoadingTestScore.value = true;
+      List<Test> tempList = [];
+      if (user.testScore != null) {
+        tempList = user.testScore!.listOfTest ?? [];
+      }
+      tempList.add(Test(
+        date: examDate.text.isEmpty ? null : examDate.text,
+        testName: testType.text.isEmpty ? null : testType.text,
+        testScore: score.text.isEmpty ? null : score.text,
+      ));
+      var success = await _firebaseProvider.updateProfile(user.copyWith(
+          testScore: TestScore(
+        listOfTest: tempList,
+      )));
+      getUserData();
+      if (success) {
+        isLoadingTestScore.value = false;
+        Get.snackbar("Successfull", "Updated the profile");
+      } else {
+        isLoadingTestScore.value = false;
+      }
     }
   }
 

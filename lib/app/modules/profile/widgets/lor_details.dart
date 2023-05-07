@@ -18,86 +18,130 @@ class LORDeailsWidget extends StatelessWidget {
         child: SizedBox(
           height: 300.h,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Name",
-                    textEditingController: _controller.lorContactName,
+            child: Form(
+              key: _controller.profileEditFormKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Name",
+                      textEditingController: _controller.lorContactName,
+                      validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Contact Number",
-                    textEditingController: _controller.lorContactNumber,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Contact Number",
+                      textEditingController: _controller.lorContactNumber,
+                      validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                      hintText: "Email",
-                      textEditingController: _controller.lorEmail),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                      hintText: "Job Post",
-                      textEditingController: _controller.lorJobRole),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                      hintText: "Company Name",
-                      textEditingController: _controller.lorCompanyName),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Recommonded by",
-                    textEditingController: _controller.recommededBy,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                        hintText: "Email",
+                        textEditingController: _controller.lorEmail,
+                        validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },
+                        ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Relationship with applicatnt",
-                    textEditingController: _controller.lorRelationship,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                        hintText: "Job Post",
+                        textEditingController: _controller.lorJobRole,
+                        validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileTextField(
-                    hintText: "Postal Address",
-                    textEditingController: _controller.postalAddress,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                        hintText: "Company Name",
+                        textEditingController: _controller.lorCompanyName,
+                        validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.updateLORDetails();
-                        },
-                        child: Text(
-                          "Save",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Recommonded by",
+                      textEditingController: _controller.recommededBy,
+                      validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Relationship with applicatnt",
+                      textEditingController: _controller.lorRelationship,
+                      validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileTextField(
+                      hintText: "Postal Address",
+                      textEditingController: _controller.postalAddress,
+                      validator: (value) {
+                              if (value == null || value == "") {
+                                return 'filed is neccessary';
+                              }
+                            },
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.updateLORDetails();
+                          },
+                          child: Text(
+                            "Save",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.white),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

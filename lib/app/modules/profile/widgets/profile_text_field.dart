@@ -10,18 +10,18 @@ class ProfileTextField extends StatelessWidget {
   bool isNumPad = false;
   Function(dynamic value)? onChanged;
   Function()? onTap;
-  ProfileTextField({super.key,this.textEditingController,this.hintText = "",this.isNumPad = false,this.onChanged,this.onTap});
+  String? Function(String?)? validator;
+  ProfileTextField({super.key,this.textEditingController,this.hintText = "",this.isNumPad = false,this.onChanged,this.onTap,this.validator});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50.h,
       child: TextFormField(
         keyboardType: isNumPad ? TextInputType.phone : TextInputType.text,
         textAlignVertical: TextAlignVertical.center,
         controller: textEditingController,
         style: Theme.of(context).textTheme.bodySmall,
-        
+        validator: validator,
         onChanged: onChanged,
         onTap: onTap,
         decoration: InputDecoration(

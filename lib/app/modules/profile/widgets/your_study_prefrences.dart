@@ -25,109 +25,147 @@ class YourStudyPrefrences extends StatelessWidget {
         child: SizedBox(
           height: 300.h,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
+            child: Form(
+              key: _controller.profileEditFormKey,
+              child: Column(
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProfileDropDown(
+                        data: ApplyFilterDropDownModels.listOfLevel,
+                        hintText: "Course Level",
+                        validator: (value) {
+                          if (value == null || value == ""){
+                            return 'select any course';
+                          }
+                        },                        
+                        onChanged: (value) {
+                          _controller.courseLevel.text = value;
+                          _controller.profileEditFormKey.currentState!.validate();
+                        },
+                      )),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ProfileDropDown(
-                      data: ApplyFilterDropDownModels.listOfLevel,
-                      hintText: "Course Level",
+                      data: [
+                        "India",
+                        "USA"
+                      ],
                       onChanged: (value) {
-                        _controller.courseLevel.text = value;
-                        print(_controller.courseLevel.value);
+                        _controller.countryPrefrence.text = value;
+                        _controller.profileEditFormKey.currentState!.validate();
                       },
-                    )),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
-                    data: [
-                      "India",
-                      "USA"
-                    ],
-                    onChanged: (value) {
-                      _controller.countryPrefrence.text = value;
-                    },
-                    hintText: "Country Prefrences",
+                      validator: (value) {
+                          if (value == null || value == ""){
+                            return 'select any country';
+                          }
+                        },
+                      hintText: "Country Prefrences",
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
-                    data: [
-                      "Arts",
-                      "Engineering",
-                      "Business Management"
-                    ],
-                    onChanged: (value) {
-                      _controller.preferredCourse.text = value;
-                    },
-                    hintText: "Preferred Course",
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileDropDown(
-                    data: [
-                      "Computer Science",
-                    ],
-                    onChanged: (value) {
-                      _controller.specialization.text = value;
-                    },
-                    hintText: "Specialization",
-                  ),
-                ),
-                Padding(
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Obx(
-                      () => ProfileDatePicker(
-                        hintText: "In Take",
-                        controller: _controller.inTake,
-                        onTap: () async {
-                          DateTime? piackedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
-                              lastDate: DateTime(2050));
-                          _controller.inTakeObs.value =
-                              DateFormat('dd-MM-yyyy').format(piackedDate!);
-                          _controller.inTake.text = DateFormat('dd-MM-yyyy').format(piackedDate);
-                          print(_controller.inTake.text);
+                    child: ProfileDropDown(
+                      data: [
+                        "Arts",
+                        "Engineering",
+                        "Business Management"
+                      ],
+                      onChanged: (value) {
+                        _controller.preferredCourse.text = value;
+                        _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      validator: (value) {
+                          if (value == null || value == ""){
+                            return 'select any course';
+                          }
                         },
-                        date: _controller.inTakeObs.value,
-                      ),
-                    )),
-                Padding(
+                      hintText: "Preferred Course",
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ProfileTextField(
-                      hintText: "Budget",
-                      isNumPad: true,
-                      textEditingController: _controller.budget,
-                    )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
+                    child: ProfileDropDown(
+                      data: const [
+                        "Computer Science",
+                      ],
+                      onChanged: (value) {
+                        _controller.specialization.text = value;
+                        _controller.profileEditFormKey.currentState!.validate();
+                      },
+                      validator: (value) {
+                          if (value == null || value == ""){
+                            return 'select any branches';
+                          }
                         },
-                        child: Text(
-                          "Cancel",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.updateStudyPrefrences();
+                      hintText: "Specialization",
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Obx(
+                        () => ProfileDatePicker(
+                          hintText: "In Take",
+                          controller: _controller.inTake,
+                          validator: (value) {
+                            print(value);
+                            if(value == null || value == ''){
+                              return 'pick date';
+                            }
+                          },
+                          onTap: () async {
+                            DateTime? piackedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1950),
+                                lastDate: DateTime(2050));
+                            _controller.inTakeObs.value =
+                                DateFormat('dd-MM-yyyy').format(piackedDate!);
+                            _controller.inTake.text = DateFormat('dd-MM-yyyy').format(piackedDate);
+                            print(_controller.inTake.text);
+                            _controller.profileEditFormKey.currentState!.validate();
+                          },
+                          date: _controller.inTakeObs.value,
+                        ),
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProfileTextField(
+                        hintText: "Budget",
+                        isNumPad: true,
+                        validator: (value) {
+                          if (value == null || value == ""){
+                            return 'select buget';
+                          }
                         },
-                        child: Text(
-                          "Save",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                        textEditingController: _controller.budget,
+                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.updateStudyPrefrences();
+                          },
+                          child: Text(
+                            "Save",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.white),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
