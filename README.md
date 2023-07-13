@@ -1,3 +1,3 @@
 # apply_course
 
-A new Flutter project.
+This is showcase project to see my coding skills.
