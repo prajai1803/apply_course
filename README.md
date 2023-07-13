@@ -2,8 +2,8 @@
 
 This is showcase project to see my coding skills.
 
-
 Screen Shots!
+
 ![photo_2023-07-13_20-02-45](https://github.com/prajai1803/apply_course/assets/73019477/fc1481c3-b8ae-4d74-8e13-1b88e2a9ccd8)
 ![photo_2023-07-13_20-02-45 (2)](https://github.com/prajai1803/apply_course/assets/73019477/fad4b7c3-92bf-42d7-b5e7-e131b8d7ca3b)
 ![photo_2023-07-13_20-02-45 (3)](https://github.com/prajai1803/apply_course/assets/73019477/6931d397-3243-4ba9-ba07-c5e507818517)
