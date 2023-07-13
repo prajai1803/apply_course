@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../widgets/card_button.dart';
 import '../../widgets/course_card.dart';
+import 'widgets/drawer.dart';
 
 class HomeScreen extends GetView {
   HomeScreen({super.key});
@@ -20,10 +21,11 @@ class HomeScreen extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        // _controller.filterSearch("BCA");
-        FirebaseProvider().test();
-      },child: Icon(Icons.abc)),
+      key: _controller.scaffoldKey,
+      // floatingActionButton: FloatingActionButton(onPressed: (){
+      //   // _controller.filterSearch("BCA");
+      //   FirebaseProvider().test();
+      // },child: Icon(Icons.abc)),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () async {
       //     FirebaseFirestore _f = FirebaseFirestore.instance;
@@ -56,6 +58,8 @@ class HomeScreen extends GetView {
       //   },
       //   child: Icon(Icons.abc),
       // ),
+
+      endDrawer: AppDrawer(),
       backgroundColor: const Color.fromARGB(255, 244, 245, 255),
       body: SafeArea(
         child: Column(
@@ -91,7 +95,9 @@ class HomeScreen extends GetView {
                       ),
                       InkWell(
                         onTap: () {
-                          _controller.getCourses();
+                          // _controller.getCourses();
+                          _controller.openDrawer();
+                          print("object");
                         },
                         child: Padding(
                           padding: EdgeInsets.all(8.0.r),
@@ -241,30 +247,6 @@ class HomeScreen extends GetView {
             Obx(
               () => Container(
                 child: _controller.isFilterLoading.value ?
-                    // ? Expanded(
-                    //     child: RefreshIndicator(
-                    //       onRefresh: () {
-                    //         return _controller.reFreshCourse();
-                    //       },
-                    //       child: ListView.builder(
-                    //         itemCount: _controller.coursesList.length,
-                    //         itemBuilder: (context, index) {
-                    //           var data = _controller.coursesList[index];
-                    //           return CourseCard(
-                    //             universityName: data.university,
-                    //             applicationFee: data.applicationFee,
-                    //             mode: data.programMethod,
-                    //             courseName: data.courseName,
-                    //             duration: data.programLength,
-                    //             location: data.location,
-                    //             courseLogo: data.universityLogo,
-                    //             tutionFee: data.tutionFee,
-                    //             programLevel: data.programLevel,
-                    //           );
-                    //         },
-                    //       ),
-                    //     ),
-                    //   )
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -8,6 +8,8 @@ import 'package:get_storage/get_storage.dart';
 class HomeController extends GetxController {
   final FirebaseProvider _firebaseProvider = FirebaseProvider();
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   final coursesListPermanant = List<CourseModel>.empty(growable: true).obs;
   final coursesList = List<CourseModel>.empty(growable: true).obs;
   var isFilterLoading = false.obs;
@@ -48,6 +50,10 @@ class HomeController extends GetxController {
     // TODO: implement onClose
     super.onClose();
     coursesList.clear();
+  }
+
+  void openDrawer() {
+    scaffoldKey.currentState!.openEndDrawer();
   }
 
   // Apply Filter Methods
